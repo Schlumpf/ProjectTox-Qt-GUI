@@ -46,7 +46,7 @@ QGroupBox* LoggingSettingsPage::buildLoggingGroup()
     QLabel* encryptLogsInfoLabel = new QLabel(group);
     encryptLogsInfoLabel->setPixmap(QPixmap(":/icons/information.png"));
     encryptLogsInfoLabel->setFixedSize(16, 16);
-    encryptLogsInfoLabel->setToolTip(QString("%1\n%2").arg("It is highly recommended that you encrypt logs as a countermeasure to logs being stolen.", "Don't disable this option unless you have really good reasons for doing so."));
+    encryptLogsInfoLabel->setToolTip(tr("It is highly recommended that you encrypt logs as a countermeasure to logs being stolen.\nDon't disable this option unless you have really good reasons for doing so."));
 
     QHBoxLayout* encryptLogsLayout = new QHBoxLayout();
 
