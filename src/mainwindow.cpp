@@ -16,6 +16,8 @@
 
 #include "mainwindow.hpp"
 
+#include "aboutdialog.hpp"
+#include "appinfo.hpp"
 #include "friendrequestdialog.hpp"
 #include "pageswidget.hpp"
 #include "Settings/settings.hpp"
@@ -61,6 +63,15 @@ MainWindow::MainWindow(QWidget* parent)
     connect(settingsAction, &QAction::triggered, this, &MainWindow::onSettingsActionTriggered);
 
     toolsMenu->addActions(QList<QAction*>() << settingsAction);
+
+    QMenu* aboutMenu = menu->addMenu("About");
+    QAction* aboutQtAction = new QAction("About Qt", this);
+    QAction* aboutAppAction = new QAction(QString("About %1").arg(AppInfo::name), this);
+
+    connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    connect(aboutAppAction, &QAction::triggered, this, &MainWindow::onAboutAppActionTriggered);
+
+    aboutMenu->addActions(QList<QAction*>() << aboutQtAction << aboutAppAction);
 
     QDockWidget* friendDock = new QDockWidget(this);
     friendDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
@@ -195,4 +206,10 @@ void MainWindow::onFailedToAddFriend(const QString& userId)
 void MainWindow::onSettingsActionTriggered()
 {
     Settings::getInstance().executeSettingsDialog(this);
+}
+
+void MainWindow::onAboutAppActionTriggered()
+{
+    AboutDialog dialog(this);
+    dialog.exec();
 }
