@@ -16,10 +16,19 @@
 
 #include "starter.hpp"
 #include <QApplication>
+#include "Settings/settings.hpp"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    // Translate application
+    const Settings& settings = Settings::getInstance();
+    QTranslator appTranslator;
+    if(appTranslator.load(settings.getGuiLanguage().toString(), ":/lang/"))
+        a.installTranslator(&appTranslator);
+
     Starter s;
+
     return a.exec();
 }

@@ -30,6 +30,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) :
     //NOTE: make use of when logging will be implemented
     //addPage(":/icons/database.png", tr("Logging"), new LoggingSettingsPage(this));
 
+    listWidget->setCurrentRow(0);
     listWidget->setMinimumWidth(130);
     setMinimumSize(450, 325);
 }

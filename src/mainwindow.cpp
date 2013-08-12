@@ -44,29 +44,22 @@ MainWindow::MainWindow(QWidget* parent)
 
     setGeometry((screenWidth - appWidth) / 2, (screenHeight - appHeight) / 2, appWidth, appHeight);
 
-    // Translate application
-    const Settings& settings = Settings::getInstance();
-    if(appTranslator.load(settings.getGuiLanguage().toString(), ":/lang/"))
-        qApp->installTranslator(&appTranslator);
-    else
-        qCritical() << "Couldn't load translation file!";
-
     setWindowTitle(tr("developers' test version, not for public use"));
 
     QMenuBar* menu = new QMenuBar(this);
     setMenuBar(menu);
     setContextMenuPolicy(Qt::PreventContextMenu);
 
-    QMenu* toolsMenu = menu->addMenu("Tools");
+    QMenu* toolsMenu = menu->addMenu(tr("Tools"));
 
     QAction* settingsAction = new QAction(QIcon(":/icons/setting_tools.png"), tr("Settings"), this);
     connect(settingsAction, &QAction::triggered, this, &MainWindow::onSettingsActionTriggered);
 
     toolsMenu->addActions(QList<QAction*>() << settingsAction);
 
-    QMenu* aboutMenu = menu->addMenu("About");
-    QAction* aboutQtAction = new QAction("About Qt", this);
-    QAction* aboutAppAction = new QAction(QString("About %1").arg(AppInfo::name), this);
+    QMenu* aboutMenu = menu->addMenu(tr("About"));
+    QAction* aboutQtAction = new QAction(tr("About Qt"), this);
+    QAction* aboutAppAction = new QAction(tr("About %1").arg(AppInfo::name), this);
 
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(aboutAppAction, &QAction::triggered, this, &MainWindow::onAboutAppActionTriggered);

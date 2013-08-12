@@ -205,14 +205,19 @@
 <context>
     <name>GuiSettingsPage</name>
     <message>
-        <location filename="../../src/Settings/guisettingspage.cpp" line="26"/>
+        <location filename="../../src/Settings/guisettingspage.cpp" line="27"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/guisettingspage.cpp" line="28"/>
+        <location filename="../../src/Settings/guisettingspage.cpp" line="29"/>
         <source>GUI language</source>
         <translation>GUI language</translation>
+    </message>
+    <message>
+        <location filename="../../src/Settings/guisettingspage.cpp" line="39"/>
+        <source>You need to restart TOX.</source>
+        <translation>You need to restart TOX.</translation>
     </message>
 </context>
 <context>
@@ -227,26 +232,53 @@
         <source>Encrypt logs</source>
         <translation>Encrypt logs</translation>
     </message>
+    <message>
+        <location filename="../../src/Settings/loggingsettingspage.cpp" line="49"/>
+        <source>It is highly recommended that you encrypt logs as a countermeasure to logs being stolen.
+Don&apos;t disable this option unless you have really good reasons for doing so.</source>
+        <translation>It is highly recommended that you encrypt logs as a countermeasure to logs being stolen.
+Don&apos;t disable this option unless you have really good reasons for doing so.</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="50"/>
+        <location filename="../../src/mainwindow.cpp" line="54"/>
         <source>developers&apos; test version, not for public use</source>
         <translation>developers&apos; test version, not for public use</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="58"/>
+        <location filename="../../src/mainwindow.cpp" line="60"/>
+        <source>Tools</source>
+        <translation>Tools</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="62"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="180"/>
+        <location filename="../../src/mainwindow.cpp" line="67"/>
+        <source>About</source>
+        <translation>About</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="68"/>
+        <source>About Qt</source>
+        <translation>About Qt</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="69"/>
+        <source>About %1</source>
+        <translation>About %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="193"/>
         <source>Couldn&apos;t remove friend &quot;%1&quot;</source>
         <translation>Couldn&apos;t remove friend &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="188"/>
+        <location filename="../../src/mainwindow.cpp" line="201"/>
         <source>Couldn&apos;t add friend with User ID
 &quot;%1&quot;</source>
         <translation>Couldn&apos;t add friend with User ID

@@ -41,7 +41,6 @@ private:
     QThread* coreThread;
     FriendsWidget* friendsWidget;
     OurUserItemWidget* ourUserItem;
-    QTranslator appTranslator;
 
 private slots:
     void onConnected();
