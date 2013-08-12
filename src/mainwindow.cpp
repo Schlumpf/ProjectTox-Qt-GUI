@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget* parent)
     setGeometry((screenWidth - appWidth) / 2, (screenHeight - appHeight) / 2, appWidth, appHeight);
 
     setWindowTitle(tr("developers' test version, not for public use"));
+    setWindowIcon(QIcon(":/icons/icon64.png"));
 
     QMenuBar* menu = new QMenuBar(this);
     setMenuBar(menu);

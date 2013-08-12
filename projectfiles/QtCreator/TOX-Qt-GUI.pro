@@ -102,7 +102,9 @@ SOURCES += \
     ../../submodules/ProjectTox-Core/core/net_crypto.c \
     ../../submodules/ProjectTox-Core/core/network.c \
     ../../submodules/ProjectTox-Core/core/friend_requests.c \
-    ../../submodules/ProjectTox-Core/core/LAN_discovery.c
+    ../../submodules/ProjectTox-Core/core/LAN_discovery.c \
+    ../../submodules/ProjectTox-Core/core/ping.c \
+    ../../submodules/ProjectTox-Core/core/util.c
 
 HEADERS  += \
     ../../submodules/ProjectTox-Core/core/DHT.h \
@@ -111,7 +113,9 @@ HEADERS  += \
     ../../submodules/ProjectTox-Core/core/net_crypto.h \
     ../../submodules/ProjectTox-Core/core/network.h \
     ../../submodules/ProjectTox-Core/core/friend_requests.h \
-    ../../submodules/ProjectTox-Core/core/LAN_discovery.h
+    ../../submodules/ProjectTox-Core/core/LAN_discovery.h \
+    ../../submodules/ProjectTox-Core/core/ping.h \
+    ../../submodules/ProjectTox-Core/core/util.h
 
 RESOURCES += \
     ../../resources/resources.qrc
