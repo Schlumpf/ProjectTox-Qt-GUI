@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     setGeometry((screenWidth - appWidth) / 2, (screenHeight - appHeight) / 2, appWidth, appHeight);
 
+    setObjectName("mainwindow");
     setWindowTitle(tr("developers' test version, not for public use"));
     setWindowIcon(QIcon(":/icons/icon64.png"));
 
@@ -68,6 +69,7 @@ MainWindow::MainWindow(QWidget* parent)
     aboutMenu->addActions(QList<QAction*>() << aboutQtAction << aboutAppAction);
 
     QDockWidget* friendDock = new QDockWidget(this);
+    friendDock->setObjectName("FriendDock");
     friendDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
     friendDock->setTitleBarWidget(new QWidget(friendDock));
     friendDock->setContextMenuPolicy(Qt::PreventContextMenu);
@@ -127,6 +129,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(friendsWidget, &FriendsWidget::friendRemoved, core, &Core::removeFriend);
 
     setCentralWidget(pages);
+
+    Settings::getInstance().loadWindow(this);
 }
 
 MainWindow::~MainWindow()
@@ -134,6 +138,12 @@ MainWindow::~MainWindow()
     coreThread->quit();
     coreThread->wait();
     delete core;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    Settings::getInstance().saveWindow(this);
+    QMainWindow::closeEvent(event);
 }
 
 void MainWindow::onFriendRequestRecieved(const QString& userId, const QString& message)

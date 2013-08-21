@@ -18,6 +18,7 @@
 #define SETTINGS_HPP
 
 #include <QMainWindow>
+#include <QMap>
 
 #include <QVariant>
 typedef char optKeyCode;
@@ -34,8 +35,8 @@ public:
 
     void executeSettingsDialog(QWidget* parent);
 
-    static void saveWindow(const QMainWindow* window);
-    static void loadWindow(QMainWindow* window);
+    void saveWindow(const QMainWindow* window);
+    void loadWindow(QMainWindow* window);
 
     static const QString FILENAME;
 
@@ -80,6 +81,13 @@ public:
 
     bool enableLogging;
     bool encryptLogs;
+
+    struct WindowSettings
+    {
+        QByteArray geometry;
+	QByteArray state;
+    };
+    QMap<QString,WindowSettings> windowSettings;
 
 signals:
     //void dataChanged();
