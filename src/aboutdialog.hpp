@@ -18,10 +18,12 @@
 #define ABOUTDIALOG_HPP
 
 #include <QDialog>
-#include <QLabel>
+
+class QLabel;
 
 class AboutDialog : public QDialog
 {
+    Q_OBJECT
 public:
     explicit AboutDialog(QWidget* parent);
 

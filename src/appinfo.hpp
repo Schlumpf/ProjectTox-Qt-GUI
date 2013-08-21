@@ -26,7 +26,7 @@ namespace AppInfo {
     static const QString buildDate = __DATE__;
     static const QString author = name + " Project";
     static const QString years = "2013";
-    static const QString Url = "https://github.com/nurupo/ProjectTox-Qt-GUI";
+    static const QString url = "https://github.com/nurupo/ProjectTox-Qt-GUI";
     static const QString license = "GPLv3";
 
 } // namespace AppInfo

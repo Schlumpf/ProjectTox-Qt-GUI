@@ -2,6 +2,34 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="en_GB" sourcelanguage="en_GB">
 <context>
+    <name>AboutDialog</name>
+    <message>
+        <location filename="../../src/aboutdialog.cpp" line="29"/>
+        <source>About</source>
+        <translation>About</translation>
+    </message>
+    <message>
+        <location filename="../../src/aboutdialog.cpp" line="43"/>
+        <source>version %1</source>
+        <translation>version %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/aboutdialog.cpp" line="45"/>
+        <source>Build date: %1</source>
+        <translation>Build date: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/aboutdialog.cpp" line="47"/>
+        <source>This application uses %1</source>
+        <translation>This application uses %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/aboutdialog.cpp" line="50"/>
+        <source>License: %1</source>
+        <translation>License: %1</translation>
+    </message>
+</context>
+<context>
     <name>AddFriendDialog</name>
     <message>
         <location filename="../../src/addfrienddialog.cpp" line="32"/>
@@ -35,8 +63,25 @@
     </message>
     <message>
         <location filename="../../src/addfrienddialog.cpp" line="83"/>
+        <source>Please enter a valid User ID.</source>
+        <translation>Please enter a valid User ID.</translation>
+    </message>
+    <message>
         <source>UserID must be 64 HEX chars.</source>
-        <translation>User ID must be 64 HEX chars.</translation>
+        <translation type="obsolete">User ID must be 64 HEX chars.</translation>
+    </message>
+</context>
+<context>
+    <name>BasicSettingsDialog</name>
+    <message>
+        <location filename="../../src/Settings/basicsettingsdialog.cpp" line="42"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../../src/Settings/basicsettingsdialog.cpp" line="43"/>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>
@@ -159,17 +204,17 @@
         <translation>User ID:</translation>
     </message>
     <message>
-        <location filename="../../src/friendrequestdialog.cpp" line="36"/>
+        <location filename="../../src/friendrequestdialog.cpp" line="37"/>
         <source>Friend request message:</source>
         <translation>Friend request message:</translation>
     </message>
     <message>
-        <location filename="../../src/friendrequestdialog.cpp" line="43"/>
+        <location filename="../../src/friendrequestdialog.cpp" line="44"/>
         <source>Accept</source>
         <translation>Accept</translation>
     </message>
     <message>
-        <location filename="../../src/friendrequestdialog.cpp" line="44"/>
+        <location filename="../../src/friendrequestdialog.cpp" line="45"/>
         <source>Reject</source>
         <translation>Reject</translation>
     </message>
@@ -243,42 +288,42 @@ Don&apos;t disable this option unless you have really good reasons for doing so.
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="54"/>
+        <location filename="../../src/mainwindow.cpp" line="48"/>
         <source>developers&apos; test version, not for public use</source>
         <translation>developers&apos; test version, not for public use</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="60"/>
+        <location filename="../../src/mainwindow.cpp" line="55"/>
         <source>Tools</source>
         <translation>Tools</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="62"/>
+        <location filename="../../src/mainwindow.cpp" line="57"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="67"/>
+        <location filename="../../src/mainwindow.cpp" line="62"/>
         <source>About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="68"/>
+        <location filename="../../src/mainwindow.cpp" line="63"/>
         <source>About Qt</source>
         <translation>About Qt</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="69"/>
+        <location filename="../../src/mainwindow.cpp" line="64"/>
         <source>About %1</source>
         <translation>About %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="193"/>
+        <location filename="../../src/mainwindow.cpp" line="197"/>
         <source>Couldn&apos;t remove friend &quot;%1&quot;</source>
         <translation>Couldn&apos;t remove friend &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="201"/>
+        <location filename="../../src/mainwindow.cpp" line="205"/>
         <source>Couldn&apos;t add friend with User ID
 &quot;%1&quot;</source>
         <translation>Couldn&apos;t add friend with User ID

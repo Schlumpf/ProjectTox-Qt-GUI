@@ -26,13 +26,13 @@ AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent)
 {
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    setWindowTitle("About");
+    setWindowTitle(tr("About"));
 
     QGridLayout* layout = new QGridLayout(this);
     layout->setSizeConstraint(QLayout::SetFixedSize);
 
     const int SPACER_SIZE = 8;
-    const QString Url("<a href=\"%2\">%1</a>");
+    const QString url("<a href=\"%2\">%1</a>");
 
     QLabel* iconLabel = new QLabel(this);
     iconLabel->setPixmap(QPixmap(":/icons/icon64.png"));
@@ -40,16 +40,16 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     QLabel* applicationNameLabel = getLabel(AppInfo::name, 16, true, Qt::AlignLeft);
 
-    QLabel* versionLabel = getLabel(QString("version %1").arg(AppInfo::version), 8, false, Qt::AlignLeft);
+    QLabel* versionLabel = getLabel(tr("version %1").arg(AppInfo::version), 8, false, Qt::AlignLeft);
 
-    QLabel* buildDateLabel = getLabel(QString("Build date: %1").arg(AppInfo::buildDate), 8, false, Qt::AlignLeft);
+    QLabel* buildDateLabel = getLabel(tr("Build date: %1").arg(AppInfo::buildDate), 8, false, Qt::AlignLeft);
 
-    QLabel* iconsSourceLabel = getLabel(QString("%1 %2").arg("This application uses").arg(Url.arg("FatCow icons").arg("http://www.fatcow.com/free-icons")), 8, false, Qt::AlignLeft);
+    QLabel* iconsSourceLabel = getLabel(tr("This application uses %1").arg(url.arg("FatCow icons").arg("http://www.fatcow.com/free-icons")), 8, false, Qt::AlignLeft);
     iconsSourceLabel->setOpenExternalLinks(true);
 
-    QLabel* licenseLabel = getLabel(QString("License: %1").arg(AppInfo::license), 8, false, Qt::AlignLeft);
+    QLabel* licenseLabel = getLabel(tr("License: %1").arg(AppInfo::license), 8, false, Qt::AlignLeft);
 
-    QLabel* copyrightLabel = getLabel(QString("(c) %1, %2").arg(AppInfo::years).arg(Url.arg(AppInfo::author).arg(AppInfo::Url)), 8, false, Qt::AlignCenter);
+    QLabel* copyrightLabel = getLabel(QString("(c) %1, %2").arg(AppInfo::years).arg(url.arg(AppInfo::author).arg(AppInfo::url)), 8, false, Qt::AlignCenter);
     copyrightLabel->setOpenExternalLinks(true);
 
     layout->addWidget(iconLabel,                                0, 0, 3, 1);
