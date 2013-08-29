@@ -42,7 +42,7 @@ QGroupBox* DhtBootstrapSettingsPage::buildServerGroup()
     QGridLayout* layout = new QGridLayout(group);
 
     serverListModel = new QStandardItemModel(group);
-    serverListModel->setHorizontalHeaderLabels(QStringList() << "Name");
+    serverListModel->setHorizontalHeaderLabels(QStringList() << tr("Name"));
 
     serverListView = new CustomHintTreeView(group, QSize(10, 10));
     serverListView->setModel(serverListModel);

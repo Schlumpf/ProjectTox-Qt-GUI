@@ -19,6 +19,7 @@
 
 #include <QMainWindow>
 #include <QHash>
+#include <QVariant>
 
 class Settings : public QObject
 {
