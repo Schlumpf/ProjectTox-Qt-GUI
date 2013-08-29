@@ -18,10 +18,7 @@
 #define SETTINGS_HPP
 
 #include <QMainWindow>
-#include <QMap>
-
-#include <QVariant>
-typedef char optKeyCode;
+#include <QHash>
 
 class Settings : public QObject
 {
@@ -30,21 +27,7 @@ public:
     static Settings& getInstance();
     ~Settings();
 
-    void load();
-    void save();
-
     void executeSettingsDialog(QWidget* parent);
-
-    void saveWindow(const QMainWindow* window);
-    void loadWindow(QMainWindow* window);
-
-    static const QString FILENAME;
-
-    bool loaded;
-
-    Settings();
-    Settings(Settings &settings) = delete;
-    Settings& operator=(const Settings&) = delete;
 
     struct DhtServer
     {
@@ -72,6 +55,22 @@ public:
     bool getEncryptLogs() const;
     void setEncryptLogs(bool newValue);
 
+    void loadWindow(QMainWindow* window) const;
+    // Assumes all windows have unique objectName set
+    void saveWindow(const QMainWindow* window);
+
+private:
+    Settings();
+    Settings(Settings &settings) = delete;
+    Settings& operator=(const Settings&) = delete;
+
+    void save();
+    void load();
+
+    static const QString FILENAME;
+
+    bool loaded;
+
     QList<DhtServer> dhtServerList;
     int dhtServerId;
     bool dontShowDhtDialog;
@@ -85,9 +84,10 @@ public:
     struct WindowSettings
     {
         QByteArray geometry;
-	QByteArray state;
+        QByteArray state;
     };
-    QMap<QString,WindowSettings> windowSettings;
+
+    QHash<QString, WindowSettings> windowSettings;
 
 signals:
     //void dataChanged();
