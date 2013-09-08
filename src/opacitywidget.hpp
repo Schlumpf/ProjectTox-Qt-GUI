@@ -14,25 +14,34 @@
     See the COPYING file for more details.
 */
 
-#ifndef MESSAGELABEL_HPP
-#define MESSAGELABEL_HPP
+#ifndef OPACITYWIDGET_HPP
+#define OPACITYWIDGET_HPP
 
-#include <QLabel>
+#include <QWidget>
 
-class MessageLabel : public QLabel
+class QPropertyAnimation;
+class QGraphicsOpacityEffect;
+
+/*! A widget, whith fade effect and opacity option. */
+class OpacityWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MessageLabel(QWidget *parent = 0);
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 
-    void setMessageId(int id);
-    int messageId() const;
+    explicit OpacityWidget(QWidget *parent = 0);
+    qreal opacity() const;
+    
+public slots:
+    void setOpacity(qreal arg);
 
-private slots:
-    void copyPlainText();
+protected:
+    void showEvent(QShowEvent *e);
 
 private:
-    int mId;
+    QPropertyAnimation     *animation;
+    QGraphicsOpacityEffect *effect;
+    qreal                   mOpacity;
 };
 
-#endif // MESSAGELABEL_HPP
+#endif // OPACITYWIDGET_HPP

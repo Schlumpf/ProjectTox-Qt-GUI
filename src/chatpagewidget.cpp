@@ -18,7 +18,7 @@
 #include "ouruseritemwidget.hpp"
 #include "status.hpp"
 #include "Settings/settings.hpp"
-
+#include "customhintwidget.hpp"
 #include "messagedisplaywidget.hpp"
 #include "emoticonmenu.hpp"
 
@@ -37,7 +37,7 @@ ChatPageWidget::ChatPageWidget(int friendId, QWidget* parent) :
     connect(input, &InputTextWidget::sendMessage, this, &ChatPageWidget::sendMessage);
 
     // Create emoticon menu :)
-    QWidget *inputPanel = new QWidget(this);
+    CustomHintWidget *inputPanel = new CustomHintWidget(this, QSize(10, 10));
     EmoticonMenu *menu = new EmoticonMenu(this);
     emoticonButton = new QToolButton(inputPanel);
     emoticonButton->setPopupMode(QToolButton::InstantPopup);
@@ -73,7 +73,7 @@ int ChatPageWidget::getFriendId() const
 
 void ChatPageWidget::messageReceived(const QString& message)
 {
-    display->appendMessage(username, message);
+    display->appendMessage(username, message, -1, false);
 }
 
 void ChatPageWidget::setUsername(const QString& newUsername)
@@ -86,12 +86,12 @@ void ChatPageWidget::setStatus(Status newStatus)
 {
     status = newStatus;
     friendItem->setStatus(status);
-    input->setReadOnly(newStatus != Status::Online);
-    emoticonButton->setDisabled(newStatus != Status::Online);
+    input->setReadOnly(newStatus == Status::Offline);
+    emoticonButton->setDisabled(newStatus == Status::Offline);
 
 }
 
 void ChatPageWidget::messageSentResult(const QString& message, int messageId)
 {
-    display->appendMessage(Settings::getInstance().getUsername(), message, messageId);
+    display->appendMessage(Settings::getInstance().getUsername(), message, messageId, true);
 }

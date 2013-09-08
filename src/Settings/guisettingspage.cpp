@@ -1,7 +1,9 @@
 #include "guisettingspage.h"
+#include "settings.hpp"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QCheckBox>
 #include <QComboBox>
 #include <QFormLayout>
 #include <QLabel>
@@ -9,40 +11,19 @@
 GuiSettingsPage::GuiSettingsPage(QWidget *parent) :
     AbstractSettingsPage(parent)
 {
-
-}
-
-void GuiSettingsPage::applyChanges()
-{
-    Settings& settings = Settings::getInstance();
-    settings.setGUILanguage(langCombo->itemData(langCombo->currentIndex()));
-
-
 }
 
 void GuiSettingsPage::buildGui()
 {
     // Language
-    QVBoxLayout *layout     = new QVBoxLayout(this);
-    QGroupBox *langBox      = new QGroupBox(tr("Language"), this);
-    QFormLayout *formLayout = new QFormLayout;
-    QLabel *langLabel       = new QLabel(tr("GUI language"), this);
-    langCombo               = new QComboBox(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
-    langCombo->addItem(QIcon(":/icons/flag_great_britain.png"), "English", QVariant("en_GB"));
-    langCombo->addItem(QIcon(":/icons/flag_germany.png"), "Deutsch", QVariant("de_DE"));
+    QGroupBox *languageGroup  = buildLanguageGroup();
+    QGroupBox *animationGroup = buildAnimationGroup();
 
-    formLayout->setWidget(0, QFormLayout::LabelRole, langLabel);
-    formLayout->setWidget(0, QFormLayout::FieldRole, langCombo);
-    langBox->setLayout(formLayout);
-
-    restartLabel = new QLabel(tr("You need to restart TOX."), this);
-    restartLabel->setHidden(true);
-    restartLabel->setDisabled(true);
-
-    layout->addWidget(langBox);
-    layout->addWidget(restartLabel);
-    layout->addItem(new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    layout->addWidget(animationGroup);
+    layout->addWidget(languageGroup);
+    layout->addStretch(0);
 }
 
 void GuiSettingsPage::setGui()
@@ -53,6 +34,8 @@ void GuiSettingsPage::setGui()
 
     connect(langCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(showRestartInfo(int)));
     //connect(langCombo, &QComboBox::currentIndexChanged, this, &GuiSettingsPage::showRestartInfo);
+
+    enableAnimationCheckbox->setChecked(settings.isAnimationEnabled());
 }
 
 void GuiSettingsPage::showRestartInfo(int i)
@@ -63,4 +46,43 @@ void GuiSettingsPage::showRestartInfo(int i)
         restartLabel->hide();
     else
         restartLabel->show();
+}
+
+void GuiSettingsPage::applyChanges()
+{
+    Settings& settings = Settings::getInstance();
+    settings.setAnimationEnabled(enableAnimationCheckbox->isChecked());
+    settings.setGUILanguage(langCombo->itemData(langCombo->currentIndex()));
+}
+
+QGroupBox *GuiSettingsPage::buildAnimationGroup()
+{
+    QGroupBox *group = new QGroupBox(tr("Smoth animation"), this);
+    QVBoxLayout* layout = new QVBoxLayout(group);
+    enableAnimationCheckbox = new QCheckBox(tr("Enable animation"), group);
+
+    layout->addWidget(enableAnimationCheckbox);
+    return group;
+}
+
+QGroupBox *GuiSettingsPage::buildLanguageGroup()
+{
+    QGroupBox *group        = new QGroupBox(tr("Language"), this);
+    QVBoxLayout* layout     = new QVBoxLayout(group);
+
+    QFormLayout *formLayout = new QFormLayout;
+    QLabel *langLabel       = new QLabel(tr("GUI language"), group);
+    langCombo               = new QComboBox(group);
+    langCombo->addItem(QIcon(":/icons/flag_great_britain.png"), "English", QVariant("en_GB"));
+    langCombo->addItem(QIcon(":/icons/flag_germany.png"), "Deutsch", QVariant("de_DE"));
+
+    restartLabel            = new QLabel(tr("You need to restart TOX."), this);
+    restartLabel->setHidden(true);
+    restartLabel->setDisabled(true);
+
+    formLayout->setWidget(0, QFormLayout::LabelRole, langLabel);
+    formLayout->setWidget(0, QFormLayout::FieldRole, langCombo);
+    layout->addLayout(formLayout);
+    layout->addWidget(restartLabel);
+    return group;
 }
