@@ -32,39 +32,47 @@
 <context>
     <name>AddFriendDialog</name>
     <message>
-        <location filename="../../src/addfrienddialog.cpp" line="32"/>
+        <location filename="../../src/addfrienddialog.cpp" line="34"/>
         <source>Add Friend</source>
         <translation>Add Friend</translation>
     </message>
     <message>
-        <location filename="../../src/addfrienddialog.cpp" line="34"/>
+        <location filename="../../src/addfrienddialog.cpp" line="36"/>
         <source>Add friend</source>
         <translation>Add Friend</translation>
     </message>
     <message>
-        <location filename="../../src/addfrienddialog.cpp" line="36"/>
         <source>User ID:</source>
-        <translation>User ID:</translation>
+        <translation type="obsolete">User ID:</translation>
     </message>
     <message>
-        <location filename="../../src/addfrienddialog.cpp" line="39"/>
+        <location filename="../../src/addfrienddialog.cpp" line="38"/>
+        <source>Friend Address:</source>
+        <translation>Friend Address:</translation>
+    </message>
+    <message>
+        <location filename="../../src/addfrienddialog.cpp" line="41"/>
         <source>Message:</source>
         <translation>Message:</translation>
     </message>
     <message>
-        <location filename="../../src/addfrienddialog.cpp" line="41"/>
+        <location filename="../../src/addfrienddialog.cpp" line="43"/>
         <source>Hello, please add me to your friend list.</source>
         <translation>Hello, please add me to your friend list.</translation>
     </message>
     <message>
-        <location filename="../../src/addfrienddialog.cpp" line="78"/>
+        <location filename="../../src/addfrienddialog.cpp" line="80"/>
         <source>Please fill all the fields in.</source>
         <translation>Please fill all the fields in.</translation>
     </message>
     <message>
-        <location filename="../../src/addfrienddialog.cpp" line="83"/>
+        <location filename="../../src/addfrienddialog.cpp" line="85"/>
+        <source>Please enter a valid Friend address.</source>
+        <translation>Please enter a valid Friend address.</translation>
+    </message>
+    <message>
         <source>Please enter a valid User ID.</source>
-        <translation>Please enter a valid User ID.</translation>
+        <translation type="obsolete">Please enter a valid User ID.</translation>
     </message>
     <message>
         <source>UserID must be 64 HEX chars.</source>
@@ -103,6 +111,11 @@
         <location filename="../../src/Settings/dhtbootstrapsettingspage.cpp" line="41"/>
         <source>DHT Bootstrap Servers</source>
         <translation>DHT Bootstrap Servers</translation>
+    </message>
+    <message>
+        <location filename="../../src/Settings/dhtbootstrapsettingspage.cpp" line="45"/>
+        <source>Name</source>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../../src/Settings/dhtbootstrapsettingspage.cpp" line="53"/>
@@ -150,38 +163,38 @@
 <context>
     <name>DhtServerDialog</name>
     <message>
-        <location filename="../../src/Settings/dhtserverdialog.cpp" line="31"/>
         <location filename="../../src/Settings/dhtserverdialog.cpp" line="33"/>
+        <location filename="../../src/Settings/dhtserverdialog.cpp" line="35"/>
         <source>DHT Settings</source>
         <translation>DHT Settings</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/dhtserverdialog.cpp" line="35"/>
+        <location filename="../../src/Settings/dhtserverdialog.cpp" line="37"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/dhtserverdialog.cpp" line="38"/>
+        <location filename="../../src/Settings/dhtserverdialog.cpp" line="40"/>
         <source>User ID:</source>
         <translation>User ID:</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/dhtserverdialog.cpp" line="41"/>
+        <location filename="../../src/Settings/dhtserverdialog.cpp" line="43"/>
         <source>IP:</source>
         <translation>IP:</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/dhtserverdialog.cpp" line="44"/>
+        <location filename="../../src/Settings/dhtserverdialog.cpp" line="46"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/dhtserverdialog.cpp" line="100"/>
+        <location filename="../../src/Settings/dhtserverdialog.cpp" line="102"/>
         <source>Please fill all the fields in.</source>
         <translation>Please fill all the fields in.</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/dhtserverdialog.cpp" line="105"/>
+        <location filename="../../src/Settings/dhtserverdialog.cpp" line="107"/>
         <source>Please enter a valid User ID.</source>
         <translation>Please enter a valid User ID.</translation>
     </message>
@@ -250,19 +263,47 @@
 <context>
     <name>GuiSettingsPage</name>
     <message>
-        <location filename="../../src/Settings/guisettingspage.cpp" line="27"/>
+        <location filename="../../src/Settings/guisettingspage.cpp" line="60"/>
+        <source>Smoth animation</source>
+        <translation>Smoth animation</translation>
+    </message>
+    <message>
+        <location filename="../../src/Settings/guisettingspage.cpp" line="62"/>
+        <source>Enable animation</source>
+        <translation>Enable animation</translation>
+    </message>
+    <message>
+        <location filename="../../src/Settings/guisettingspage.cpp" line="70"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/guisettingspage.cpp" line="29"/>
+        <location filename="../../src/Settings/guisettingspage.cpp" line="74"/>
         <source>GUI language</source>
         <translation>GUI language</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/guisettingspage.cpp" line="39"/>
+        <location filename="../../src/Settings/guisettingspage.cpp" line="79"/>
         <source>You need to restart TOX.</source>
         <translation>You need to restart TOX.</translation>
+    </message>
+</context>
+<context>
+    <name>InputTextWidget</name>
+    <message>
+        <location filename="../../src/inputtextwidget.cpp" line="36"/>
+        <source>Cut</source>
+        <translation>Cut</translation>
+    </message>
+    <message>
+        <location filename="../../src/inputtextwidget.cpp" line="37"/>
+        <source>Copy</source>
+        <translation>Copy</translation>
+    </message>
+    <message>
+        <location filename="../../src/inputtextwidget.cpp" line="38"/>
+        <source>Paste</source>
+        <translation>Paste</translation>
     </message>
 </context>
 <context>
@@ -288,46 +329,62 @@ Don&apos;t disable this option unless you have really good reasons for doing so.
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="48"/>
+        <location filename="../../src/mainwindow.cpp" line="46"/>
         <source>developers&apos; test version, not for public use</source>
         <translation>developers&apos; test version, not for public use</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="55"/>
+        <location filename="../../src/mainwindow.cpp" line="53"/>
         <source>Tools</source>
         <translation>Tools</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="57"/>
+        <location filename="../../src/mainwindow.cpp" line="55"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="62"/>
+        <location filename="../../src/mainwindow.cpp" line="60"/>
         <source>About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="63"/>
+        <location filename="../../src/mainwindow.cpp" line="61"/>
         <source>About Qt</source>
         <translation>About Qt</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="64"/>
+        <location filename="../../src/mainwindow.cpp" line="62"/>
         <source>About %1</source>
         <translation>About %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="197"/>
+        <location filename="../../src/mainwindow.cpp" line="173"/>
         <source>Couldn&apos;t remove friend &quot;%1&quot;</source>
         <translation>Couldn&apos;t remove friend &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="205"/>
+        <location filename="../../src/mainwindow.cpp" line="181"/>
         <source>Couldn&apos;t add friend with User ID
 &quot;%1&quot;</source>
         <translation>Couldn&apos;t add friend with User ID
 &quot;%1&quot;</translation>
+    </message>
+</context>
+<context>
+    <name>MessageDisplayWidget</name>
+    <message>
+        <location filename="../../src/messagedisplaywidget.cpp" line="136"/>
+        <source>Couldn&apos;t send the message!</source>
+        <translation>Couldn&apos;t send the message!</translation>
+    </message>
+</context>
+<context>
+    <name>MessageLabel</name>
+    <message>
+        <location filename="../../src/messagelabel.cpp" line="35"/>
+        <source>Copy</source>
+        <translation>Copy</translation>
     </message>
 </context>
 <context>
@@ -344,26 +401,68 @@ Don&apos;t disable this option unless you have really good reasons for doing so.
     </message>
     <message>
         <location filename="../../src/ouruseritemwidget.cpp" line="34"/>
+        <source>Copy Friend Address</source>
+        <translation>Copy Friend Address</translation>
+    </message>
+    <message>
         <source>Copy User ID</source>
-        <translation>Copy User ID</translation>
+        <translation type="obsolete">Copy User ID</translation>
     </message>
 </context>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../../src/Settings/settingsdialog.cpp" line="26"/>
+        <location filename="../../src/Settings/settingsdialog.cpp" line="27"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/settingsdialog.cpp" line="28"/>
+        <location filename="../../src/Settings/settingsdialog.cpp" line="29"/>
         <source>DHT Bootstrap</source>
         <translation>DHT Bootstrap</translation>
     </message>
     <message>
-        <location filename="../../src/Settings/settingsdialog.cpp" line="29"/>
+        <location filename="../../src/Settings/settingsdialog.cpp" line="30"/>
         <source>GUI</source>
         <translation>GUI</translation>
+    </message>
+</context>
+<context>
+    <name>Status</name>
+    <message>
+        <source>Online</source>
+        <translation type="obsolete">Online</translation>
+    </message>
+    <message>
+        <source>Away</source>
+        <translation type="obsolete">Away</translation>
+    </message>
+    <message>
+        <source>Busy</source>
+        <translation type="obsolete">Busy</translation>
+    </message>
+    <message>
+        <source>Offline</source>
+        <translation type="obsolete">Offline</translation>
+    </message>
+</context>
+<context>
+    <name>StatusHelper</name>
+    <message>
+        <source>Online</source>
+        <translation type="obsolete">Online</translation>
+    </message>
+    <message>
+        <source>Away</source>
+        <translation type="obsolete">Away</translation>
+    </message>
+    <message>
+        <source>Busy</source>
+        <translation type="obsolete">Busy</translation>
+    </message>
+    <message>
+        <source>Offline</source>
+        <translation type="obsolete">Offline</translation>
     </message>
 </context>
 </TS>
