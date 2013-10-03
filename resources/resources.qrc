@@ -11,12 +11,12 @@
         <file>lang/en_GB.qm</file>
         <file>icons/server.png</file>
         <file>icons/setting_tools.png</file>
-        <file>icons/application_side_list.png</file>
         <file>icons/flag_germany.png</file>
         <file>icons/flag_great_britain.png</file>
         <file>icons/information.png</file>
         <file>icons/database.png</file>
         <file>icons/icon64.png</file>
+        <file>icons/cog.png</file>
         <file>icons/emoticons/emotion_angel.png</file>
         <file>icons/emoticons/emotion_kiss.png</file>
         <file>icons/emoticons/emotion_smile.png</file>
@@ -34,5 +34,10 @@
         <file>icons/error.png</file>
         <file>icons/status_away.png</file>
         <file>icons/status_busy.png</file>
+        <file>icons/application_side_list.png</file>
+        <file>icons/cut.png</file>
+        <file>icons/paste_plain.png</file>
+        <file>icons/arrow_redo.png</file>
+        <file>icons/arrow_undo.png</file>
     </qresource>
 </RCC>
