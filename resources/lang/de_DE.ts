@@ -250,12 +250,11 @@
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="../../src/friendswidget.cpp" line="67"/>
         <source>Add Friend</source>
-        <translation>Freund hinzufügen</translation>
+        <translation type="obsolete">Freund hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../src/friendswidget.cpp" line="79"/>
+        <location filename="../../src/friendswidget.cpp" line="75"/>
         <source>User ID: %1</source>
         <translation>Benutzer ID: %1</translation>
     </message>
@@ -292,18 +291,33 @@
     <name>InputTextWidget</name>
     <message>
         <location filename="../../src/inputtextwidget.cpp" line="36"/>
+        <source>Undo</source>
+        <translation>Rückgängig</translation>
+    </message>
+    <message>
+        <location filename="../../src/inputtextwidget.cpp" line="37"/>
+        <source>Redo</source>
+        <translation>Wiederholen</translation>
+    </message>
+    <message>
+        <location filename="../../src/inputtextwidget.cpp" line="38"/>
         <source>Cut</source>
         <translation>Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../../src/inputtextwidget.cpp" line="37"/>
+        <location filename="../../src/inputtextwidget.cpp" line="39"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../../src/inputtextwidget.cpp" line="38"/>
+        <location filename="../../src/inputtextwidget.cpp" line="40"/>
         <source>Paste</source>
         <translation>Einfügen</translation>
+    </message>
+    <message>
+        <location filename="../../src/inputtextwidget.cpp" line="167"/>
+        <source>Type text here...</source>
+        <translation>Hier Text eingeben...</translation>
     </message>
 </context>
 <context>
@@ -329,42 +343,55 @@ Deaktiviere diese Option nicht, es sei denn, du hast wirklich gute Gründe dafü
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="46"/>
+        <location filename="../../src/mainwindow.cpp" line="49"/>
         <source>developers&apos; test version, not for public use</source>
         <translation>Entwicklerversion, nicht für öffentliche Nutzung bestimmt</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="53"/>
         <source>Tools</source>
-        <translation>Werkzeuge</translation>
+        <translation type="obsolete">Werkzeuge</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="55"/>
+        <location filename="../../src/mainwindow.cpp" line="87"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="60"/>
         <source>About</source>
-        <translation>Über</translation>
+        <translation type="obsolete">Über</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="61"/>
+        <location filename="../../src/mainwindow.cpp" line="90"/>
         <source>About Qt</source>
         <translation>Über Qt</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="62"/>
+        <location filename="../../src/mainwindow.cpp" line="89"/>
         <source>About %1</source>
         <translation>Über %1</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="173"/>
+        <location filename="../../src/mainwindow.cpp" line="76"/>
+        <source>Add friend</source>
+        <translation>Freund hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="84"/>
+        <source>Mainmenu</source>
+        <translation>Hauptmenü</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="92"/>
+        <source>Quit</source>
+        <translation>Beenden</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="188"/>
         <source>Couldn&apos;t remove friend &quot;%1&quot;</source>
         <translation>Konnte Freund &quot;%1&quot; nicht entfernen</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="181"/>
+        <location filename="../../src/mainwindow.cpp" line="196"/>
         <source>Couldn&apos;t add friend with User ID
 &quot;%1&quot;</source>
         <translation>Konnte Freund mit Benutzer ID
@@ -386,6 +413,11 @@ nicht hinzufügen</translation>
         <location filename="../../src/messagelabel.cpp" line="35"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
+    </message>
+    <message>
+        <location filename="../../src/messagelabel.cpp" line="42"/>
+        <source>Copy Message</source>
+        <translation>Nachricht kopieren</translation>
     </message>
 </context>
 <context>
