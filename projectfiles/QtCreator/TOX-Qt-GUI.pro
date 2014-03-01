@@ -33,6 +33,7 @@ QT       += core gui widgets
 TARGET = TOX-Qt-GUI
 TEMPLATE = app
 
+QMAKE_CXX = g++-4.8
 CONFIG += c++11
 
 INCLUDEPATH += ../../src/ ../../submodules/ProjectTox-Core/toxcore/
