@@ -24,23 +24,16 @@
 #include <QDataStream>
 #include "appinfo.hpp"
 #include "Settings/settings.hpp"
+#include <QDebug>
 
 Smileypack::Smileypack(QObject *parent) :
     QObject(parent)
 {
-    emoji = false;
-}
-
-Smileypack::Smileypack(const QByteArray &savedData, QObject *parent) :
-    QObject(parent)
-{
-    restore(savedData);
 }
 
 void Smileypack::operator =(const Smileypack &other)
 {
     list = other.getList();
-    emoji = other.isEmoji();
     name = other.name;
     author = other.author;
     description = other.description;
@@ -51,12 +44,18 @@ void Smileypack::operator =(const Smileypack &other)
 
 QString Smileypack::desmilify(QString htmlText)
 {
-    Smileypack pack(Settings::getInstance().getSmileyPack());
-    // Cancel if emoji
-    if (pack.isEmoji()) {
+    const Settings &settings = Settings::getInstance();
+
+    // De-emoji if emoji is enabled
+    if (settings.getSmileyType() == Smiley::Emoji) {
         QTextDocument doc;
         doc.setHtml(htmlText);
-        return doc.toPlainText();
+        QString plain = doc.toPlainText();
+
+        if(settings.isEmojiSendPlaintext())
+            return Smileypack::deemojify(plain);
+        else
+            return plain;
     }
 
     // Replace smileys by their textual representation
@@ -65,7 +64,7 @@ QString Smileypack::desmilify(QString htmlText)
     QRegularExpressionMatch match = re.match(htmlText, i);
     while (match.hasMatch()) {
         // Replace smiley and match next
-        for (const auto& pair : pack.getList()) {
+        for (const auto& pair : Smileypack::currentPack().getList()) {
             if (pair.first == match.captured(5)) {
                 const QStringList& textSmilies = pair.second;
                 if (textSmilies.isEmpty()) {
@@ -95,6 +94,7 @@ QString Smileypack::deemojify(QString text)
     return text;
 }
 
+/*
 QString Smileypack::resizeEmoji(QString text)
 {
     Settings &settings = Settings::getInstance();
@@ -111,6 +111,7 @@ QString Smileypack::resizeEmoji(QString text)
 
     return text;
 }
+*/
 
 const Smileypack::SmileypackList Smileypack::emojiList()
 {
@@ -165,33 +166,33 @@ const Smileypack::SmileypackList Smileypack::emojiList()
     return tmpList;
 }
 
-const Smileypack::SmileypackList Smileypack::defaultList()
+Smileypack &Smileypack::currentPack()
 {
-    static const SmileypackList tmpList =
-    {
-        {":/icons/emoticons/emotion_smile.png",    {":)", ":-)", ":o)"}},
-        {":/icons/emoticons/emotion_sad.png",      {":(", ":-("}},
-        {":/icons/emoticons/emotion_grin.png",     {":D", ":-D"}},
-        {":/icons/emoticons/emotion_cool.png",     {"8)", "8-)"}},
-        {":/icons/emoticons/emotion_suprised.png", {":O", ":-O"}},
-        {":/icons/emoticons/emotion_wink.png",     {";)", ";-)"}},
-        {":/icons/emoticons/emotion_cry.png",      {";(", ";-("}},
-        {":/icons/emoticons/emotion_sweat.png",    {"(:|"}},
-        {":/icons/emoticons/emotion_kiss.png",     {":*", ":-*"}},
-        {":/icons/emoticons/emotion_tongue.png",   {":P", ":-P"}},
-        {":/icons/emoticons/emotion_doubt.png",    {":^)", ":^-)"}},
-        {":/icons/emoticons/emotion_love.png",     {"(inlove)"}},
-        {":/icons/emoticons/emotion_evilgrin.png", {"]:)", "]:-)"}},
-        {":/icons/emoticons/emotion_angel.png",    {"O:)", "O:-)", "o:)", "o:-)", "(angel)"}}
-    };
-    return tmpList;
+    static Smileypack pack;
+
+    // no pack selected
+    if (pack.getName().isEmpty() && !Settings::getInstance().getSmileyPackPath().isEmpty()) {
+        if(pack.parseFile(Settings::getInstance().getSmileyPackPath()))
+            // TODO MKO correct to connect here?
+            connect(&Settings::getInstance(), &Settings::smileyPackChanged, &Smileypack::currentPack(), &Smileypack::updatePack);
+    }
+
+    return pack;
+}
+
+
+void Smileypack::updatePack()
+{
+    const Settings &settings = Settings::getInstance();
+    parseFile(settings.getSmileyPackPath());
 }
 
 bool Smileypack::parseFile(const QString &filePath)
 {
     // Open file
     QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+
+    if (!file.exists() || !file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return false;
     }
 
@@ -199,7 +200,6 @@ bool Smileypack::parseFile(const QString &filePath)
 
     // Clear old data
     list.clear();
-    emoji = false;
     name.clear();
     author.clear();
     description.clear();
@@ -222,20 +222,6 @@ bool Smileypack::parseFile(const QString &filePath)
     return true;
 }
 
-const QByteArray Smileypack::save()
-{
-    QByteArray ret;
-    QDataStream stream(&ret, QIODevice::WriteOnly);
-    stream << (*this);
-    return ret;
-}
-
-void Smileypack::restore(const QByteArray &array)
-{
-    QByteArray ar = array;
-    QDataStream stream(&ar, QIODevice::ReadOnly);
-    stream >> (*this);
-}
 
 void Smileypack::processLine(const QString &xLine, const QString &xPath, ParserStates &xState)
 {
@@ -271,43 +257,4 @@ void Smileypack::processLine(const QString &xLine, const QString &xPath, ParserS
 
         list.append({xPath+key, value.split(QRegularExpression("\\s+"))});
     }
-}
-
-
-const QString &Smileypack::packDir()
-{
-    static QString path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + '/' + "smileys";
-    return path;
-}
-
-QDataStream &operator<<(QDataStream &out, const Smileypack &pack)
-{
-    out << pack.getThemeFile() << pack.getName() << pack.getAuthor() << pack.getDescription() << pack.getVersion() << pack.getWebsite() << pack.getIcon() << pack.isEmoji();
-    out << pack.getList();
-    return out;
-}
-
-QDataStream &operator >>(QDataStream &in, Smileypack &pack)
-{
-    QString themefile;
-    QString name;
-    QString author;
-    QString desc;
-    QString version;
-    QString website;
-    QString icon;
-    bool    emoji;
-    Smileypack::SmileypackList list;
-    in >> themefile >> name >> author >> desc >> version >> website >> icon >> emoji >> list;
-
-    pack.setThemeFile(themefile);
-    pack.setName(name);
-    pack.setAuthor(author);
-    pack.setDescription(desc);
-    pack.setVersion(version);
-    pack.setWebsite(website);
-    pack.setIcon(icon);
-    pack.setEmoji(emoji);
-    pack.setList(list);
-    return in;
 }

@@ -32,6 +32,8 @@
 #include <QStyleOption>
 #include <QTextDocumentFragment>
 
+#include "Settings/settings.hpp"
+
 ChatItem::ChatItem(const QRectF &boundingRect, ChatLine *parent) :
     _parent(parent),
     _boundingRect(boundingRect),
@@ -460,9 +462,11 @@ const SmileyList *ContentsChatItem::smileyList() const
 
 void ContentsChatItem::initDocument(QTextDocument *doc)
 {
+    const Settings &settings = Settings::getInstance();
     QString text = data(MessageModel::DisplayRole).toString();
 
-    privateData()->smileys = SmileyList::fromText(text);
+    if(settings.isSmileyReplacementEnabled())
+        privateData()->smileys = SmileyList::fromText(text);
 
     doc->setPlainText(text);
     doc->setTextWidth(width());
@@ -491,9 +495,11 @@ void ContentsChatItem::initDocument(QTextDocument *doc)
 
             c.insertText(smiley.graphics());
             c.setPosition(smiley.smileyfiedStart(), QTextCursor::KeepAnchor);
-            QTextCharFormat format;
-            format.setFont(smiley.emojiFont());
-            c.mergeCharFormat(format);
+            if(settings.isCurstomEmojiFont()) {
+                QTextCharFormat format;
+                format.setFont(settings.getEmojiFont());
+                c.mergeCharFormat(format);
+            }
         }
     }
 

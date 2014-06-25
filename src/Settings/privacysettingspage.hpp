@@ -32,10 +32,6 @@ public:
     void setGui();
     void applyChanges();
 
-signals:
-
-public slots:
-
 private:
     QGroupBox *buildTypingGroup();
     QCheckBox *mTypingCheckbox;

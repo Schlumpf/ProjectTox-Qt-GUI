@@ -31,8 +31,7 @@ EmoticonMenu::EmoticonMenu(QWidget *parent) :
     layout              = new QGridLayout(actionDefaultWidget);
     updateEmoticons();
 
-    connect(&Settings::getInstance(), &Settings::smileyPackChanged, this, &EmoticonMenu::updateEmoticons);
-    connect(&Settings::getInstance(), &Settings::emojiFontChanged, this, &EmoticonMenu::updateEmoticons);
+    connect(&Settings::getInstance(), &Settings::smileySettingsChanged, this, &EmoticonMenu::updateEmoticons);
 }
 
 void EmoticonMenu::updateEmoticons()
@@ -52,33 +51,35 @@ void EmoticonMenu::updateEmoticons()
     addAction(action);
 
     // Add new pack
-    Smileypack pack(Settings::getInstance().getSmileyPack());
-    for (const auto& pair : pack.getList()) {
-        addEmoticon(pair.first, pair.second, pack.isEmoji());
+    const Settings &settings = Settings::getInstance();
+    if (settings.getSmileyType() == Smiley::Emoji) {
+        for (const auto& pair : Smileypack::emojiList()) {
+            addEmoticon(pair.first, pair.second, true);
+        }
+    }
+    else {
+        Smileypack::currentPack().getList();
+        for (const auto& pair : Smileypack::currentPack().getList()) {
+            addEmoticon(pair.first, pair.second, false);
+        }
     }
 }
 
 void EmoticonMenu::addEmoticon(const QString &imgPath, const QStringList &texts, bool isEmoji)
 {
-    Settings &settings = Settings::getInstance();
+    const Settings &settings = Settings::getInstance();
 
     QToolButton *button = new QToolButton(this);
     if (isEmoji) {
-        QFont font;
-        font.setPixelSize(16);
-        if (settings.isCurstomEmojiFont()) {
-            font.setFamily(settings.getEmojiFontFamily());
-            button->setProperty("smiley", Smileypack::resizeEmoji(imgPath));
-        } else {
-            button->setProperty("smiley", imgPath);
-        }
-        button->setFont(font);
         button->setText(imgPath);
+        if (settings.isCurstomEmojiFont())
+            button->setFont(settings.getEmojiFont());
     }
     else {
         button->setIcon(QIcon(imgPath));
-        button->setProperty("smiley", QString("<img src=\"%1\" />").arg(imgPath));
     }
+    button->setProperty("smiley", imgPath);
+    button->setProperty("rawText", texts.first());
     button->setAutoRaise(true);
     button->setToolTip(texts.first());
 
@@ -91,5 +92,6 @@ void EmoticonMenu::addEmoticon(const QString &imgPath, const QStringList &texts,
 /*! Signal sends the (first) textual form of the clicked smiley. */
 void EmoticonMenu::onEmoticonTriggered()
 {
-    emit insertEmoticon("&nbsp;"+QObject::sender()->property("smiley").toString()+"&nbsp;");
+    emit insertEmoticon(QObject::sender()->property("smiley").toString());
+    emit insertSmiley(Smiley(QObject::sender()->property("rawText").toString(), QObject::sender()->property("smiley").toString(), 0, 0, (Smiley::Type) Settings::getInstance().getSmileyType()));
 }

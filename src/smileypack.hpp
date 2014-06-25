@@ -30,39 +30,36 @@ public:
     typedef QList<QPair<QString, QStringList>> SmileypackList;
 
     explicit Smileypack(QObject *parent = 0);
-    explicit Smileypack(const QByteArray &savedData, QObject *parent = 0);
     void operator=(const Smileypack &other);
 
     bool parseFile(const QString &filePath);
 
-    const QByteArray save();
-    void restore(const QByteArray &array);
+    inline const QString &getThemeFile() const   { return themeFile;   }
+    inline void setThemeFile(const QString &x)   { themeFile = x;      }
+    inline const QString &getName() const        { return name;        }
+    inline void setName(const QString &x)        { name = x;           }
+    inline const QString &getAuthor() const      { return author;      }
+    inline void setAuthor(const QString &x)      { author = x;         }
+    inline const QString &getDescription() const { return description; }
+    inline void setDescription(const QString &x) { description = x;    }
+    inline const QString &getVersion() const     { return version;     }
+    inline void setVersion(const QString &x)     { version = x;        }
+    inline const QString &getWebsite() const     { return website;     }
+    inline void setWebsite(const QString &x)     { website = x;        }
+    inline const QString &getIcon() const        { return icon;        }
+    inline void setIcon(const QString &x)        { icon = x;           }
+    inline const SmileypackList &getList() const { return list;        }
+    inline void setList(const SmileypackList &x) { list = x;           }
 
-    const QString &getThemeFile() const             { return themeFile;   }
-    void           setThemeFile(const QString &x)   { themeFile = x;      }
-    const QString &getName() const                  { return name;        }
-    void           setName(const QString &x)        { name = x;           }
-    const QString &getAuthor() const                { return author;      }
-    void           setAuthor(const QString &x)      { author = x;         }
-    const QString &getDescription() const           { return description; }
-    void           setDescription(const QString &x) { description = x;    }
-    const QString &getVersion() const               { return version;     }
-    void           setVersion(const QString &x)     { version = x;        }
-    const QString &getWebsite() const               { return website;     }
-    void           setWebsite(const QString &x)     { website = x;        }
-    const QString &getIcon() const                  { return icon;        }
-    void           setIcon(const QString &x)        { icon = x;           }
-    const SmileypackList &getList() const               { return list;        }
-    void              setList(const SmileypackList &x)  { list = x;           }
-    bool  isEmoji() const                           { return emoji;       }
-    void setEmoji(bool x)                           { emoji = x;          }
-
-    static const QString& packDir();
-    static QString desmilify(QString htmlText);
+    static QString desmilify(QString htmlText); // and deemojifiy
     static QString deemojify(QString text);
-    static QString resizeEmoji(QString text);
+    //static QString resizeEmoji(QString text);
     static const SmileypackList emojiList();
-    static const SmileypackList defaultList();
+
+    static Smileypack &currentPack();
+
+public slots:
+    void updatePack();
 
 private:
     QString themeFile;
@@ -73,17 +70,14 @@ private:
     QString website;
     QString icon;
     SmileypackList list;
-    bool emoji;
 
     // Parser functions
-    enum ParserStates{
+    enum ParserStates {
         StateHead,
         StateSmileys
     };
     void processLine(const QString &xLine, const QString &xPath, ParserStates &xState);
 };
 
-QDataStream &operator<<(QDataStream &out, const Smileypack &pack);
-QDataStream &operator>>(QDataStream &in, Smileypack &pack);
 
 #endif // SMILEYPACK_HPP

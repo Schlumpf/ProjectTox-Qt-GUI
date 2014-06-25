@@ -88,7 +88,7 @@ void ChatViewSearchWidget::setScene(ChatScene *scene)
 
     connect(mScene, SIGNAL(destroyed()), this, SLOT(sceneDestroyed()));
     connect(mScene, SIGNAL(rowsInserted()), this, SLOT(updateHighlights()));
-    connect(&s, &Settings::smileyPackChanged, this, &ChatViewSearchWidget::updateExistingHighlights);
+    connect(&s, &Settings::smileySettingsChanged, this, &ChatViewSearchWidget::updateExistingHighlights);
     // TODO MKO Backlog
 
     connect(mScene, SIGNAL(rowsAboutToBeRemoved(int,int)), this, SLOT(rowsRemoved(int,int)), Qt::DirectConnection); // Direct connection is important

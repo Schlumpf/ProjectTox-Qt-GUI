@@ -42,10 +42,6 @@ public:
     /*! Returns pixmap URL or emoji character */
     inline QString graphics() const { return mGraphics; }
 
-    //Emoji specific
-    inline QFont emojiFont() const { return mEmojiFont; }
-    inline void setEmojiFont(const QFont &value) { mEmojiFont = value; }
-
 private:
     Type mType;
     int  mStart;
@@ -53,7 +49,6 @@ private:
     int  mTextLength;
     QString mText;
     QString mGraphics; // pixmap URL or emoji character
-    QFont   mEmojiFont;
 };
 
 class SmileyList : public QList<Smiley>

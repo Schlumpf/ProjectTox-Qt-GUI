@@ -18,6 +18,7 @@
 #define EMOTICONMENU_HPP
 
 #include <QMenu>
+#include <messages/smiley.hpp>
 
 class QGridLayout;
 class QWidgetAction;
@@ -45,6 +46,7 @@ private:
     
 signals:
     void insertEmoticon(QString);
+    void insertSmiley(Smiley);
 
 private slots:
     void onEmoticonTriggered();

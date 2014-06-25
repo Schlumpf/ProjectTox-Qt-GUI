@@ -20,6 +20,7 @@
 
 #include <QTextEdit>
 #include <QTimer>
+#include <messages/smiley.hpp>
 
 class InputTextWidget : public QTextEdit
 {
@@ -27,6 +28,9 @@ class InputTextWidget : public QTextEdit
 public:
     InputTextWidget(QWidget* parent);
     QSize sizeHint() const;
+
+public slots:
+    void insertSmiley(const Smiley &smiley);
 
 protected:
     void keyPressEvent(QKeyEvent* event);
@@ -44,17 +48,16 @@ private slots:
     void cutPlainText();
     void endTyping();
     void startTyping();
+    void resetFormat();
 
 private:
-    QString desmile(QString htmlText);
-
     QAction *actionUndo;
     QAction *actionRedo;
     QAction *actionCut;
     QAction *actionCopy;
     QAction *actionPaste;
 
-    bool mTyping;
+    bool   mTyping;
     QTimer mTypingTimer;
 };
 

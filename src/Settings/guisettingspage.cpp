@@ -35,7 +35,6 @@
 #include <QDateTime>
 
 #include "smileypack.hpp"
-#include "emojifontsettingsdialog.hpp"
 
 GuiSettingsPage::GuiSettingsPage(QWidget *parent) :
     AbstractSettingsPage(parent)
@@ -47,7 +46,6 @@ void GuiSettingsPage::buildGui()
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     layout->addWidget(buildAnimationGroup());
-    layout->addWidget(buildSmileypackGroup());
     layout->addWidget(buildChatviewGroup());
     layout->addWidget(buildOthersGroup());
     layout->addStretch(0);
@@ -58,39 +56,6 @@ void GuiSettingsPage::setGui()
     const Settings& settings = Settings::getInstance();
     enableAnimationCheckbox->setChecked(settings.isAnimationEnabled());
     minimizeToTrayCheckbox->setChecked(settings.isMinimizeOnCloseEnabled());
-
-    emojiSettings->setUseCustomFont(settings.isCurstomEmojiFont());
-    emojiSettings->setFontFamily(settings.getEmojiFontFamily());
-    emojiSettings->setFontPointSize(settings.getEmojiFontPointSize());
-
-    // Insert Emoji pack
-    Smileypack emojiPack;
-    emojiPack.setName("Emoji");
-    emojiPack.setAuthor("Unicode 6.1");
-    emojiPack.setDescription("Emoji is a Unicode block containing graphic representations of faces, which are often associated with classic emoticons.");
-    emojiPack.setList(Smileypack::emojiList());
-    emojiPack.setEmoji(true);
-    smileypackCombobox->addItem("☺ "+emojiPack.getName(), emojiPack.save());
-
-    // Insert Default pack
-    Smileypack defaultPack;
-    defaultPack.setName("TOX Qt GUI Smileys");
-    defaultPack.setAuthor("FatCow");
-    defaultPack.setDescription("TODO: Design a default smileypack for TOX Qt GUI.");
-    defaultPack.setIcon(":/icons/emoticons/emotion_smile.png");
-    defaultPack.setList(Smileypack::defaultList());
-    smileypackCombobox->addItem(QIcon(defaultPack.getIcon()), defaultPack.getName(), defaultPack.save());
-
-    // Insert smileypacks
-    searchSmileyPacks();
-
-    // Load smileypack
-    int index = smileypackCombobox->findData(settings.getSmileyPack());
-    if (index < 0) {
-        index = 1;
-    }
-    smileypackCombobox->setCurrentIndex(index);
-
     timestampLineedit->setText(settings.getTimestampFormat());
 }
 
@@ -99,11 +64,6 @@ void GuiSettingsPage::applyChanges()
     Settings& settings = Settings::getInstance();
     settings.setAnimationEnabled(enableAnimationCheckbox->isChecked());
 
-    settings.setSmileyPack(smileypackCombobox->itemData(smileypackCombobox->currentIndex()).toByteArray());
-    settings.setCurstomEmojiFont(emojiSettings->useCustomFont());
-    settings.setEmojiFontFamily(emojiSettings->getFontFamily());
-    settings.setEmojiFontPointSize(emojiSettings->getFontPointSize());
-    
     settings.setTimestampFormat(timestampLineedit->text());
     settings.setMinimizeOnClose(minimizeToTrayCheckbox->isChecked());
 }
@@ -115,32 +75,6 @@ QGroupBox *GuiSettingsPage::buildAnimationGroup()
     enableAnimationCheckbox = new QCheckBox(tr("Enable animation"), group);
 
     layout->addWidget(enableAnimationCheckbox);
-    return group;
-}
-
-QGroupBox *GuiSettingsPage::buildSmileypackGroup()
-{
-    QGroupBox *group = new QGroupBox(tr("Smileypack"), this);
-    QVBoxLayout* layout = new QVBoxLayout(group);
-    smileypackCombobox = new QComboBox(group);
-    connect(smileypackCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSmileypackDetails(int)));
-
-    emojiSettings = new EmojiFontSettingsDialog(group);
-    emojiButton = new QToolButton(group);
-    emojiButton->setText("...");
-    connect(emojiButton, &QToolButton::clicked, emojiSettings, &EmojiFontSettingsDialog::exec);
-
-    QHBoxLayout *selectLayout = new QHBoxLayout;
-    selectLayout->addWidget(smileypackCombobox);
-    selectLayout->addWidget(emojiButton);
-
-    smileypackDescLabel = new QLabel(group);
-    smileypackDescLabel->setWordWrap(true);
-    smileypackDescLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    smileypackDescLabel->setOpenExternalLinks(true);
-
-    layout->addLayout(selectLayout);
-    layout->addWidget(smileypackDescLabel);
     return group;
 }
 
@@ -161,61 +95,6 @@ QGroupBox *GuiSettingsPage::buildChatviewGroup()
     connect(timestampLineedit, &QLineEdit::textChanged, this, &GuiSettingsPage::updateTimestampPreview);
 
     return group;
-}
-
-void GuiSettingsPage::searchSmileyPacks()
-{
-    // Go to smiley pack folder
-    QDir dir(Smileypack::packDir());
-    if (!dir.mkpath(Smileypack::packDir()))
-        return;
-
-    // Go through all packs
-    dir.setFilter(QDir::Dirs|QDir::NoDot|QDir::NoDotDot);
-    QDirIterator it(dir);
-    while (it.hasNext()) {
-        it.next();
-
-        // Check theme file
-        QFileInfo f(it.filePath() + '/' + "theme");
-        if (!f.exists()) {
-            continue;
-        }
-
-        // Parse theme file
-        Smileypack newPack;
-        if (!newPack.parseFile(f.absoluteFilePath())) {
-            continue;
-        }
-
-        // Add new pack to combobox
-        QVariant data(newPack.save());
-        smileypackCombobox->addItem(QIcon(it.filePath() + '/' + newPack.getIcon()), newPack.getName(), data);
-    }
-}
-
-void GuiSettingsPage::updateSmileypackDetails(int index)
-{
-    Smileypack pack(smileypackCombobox->itemData(index).toByteArray());
-
-    QString version = pack.getVersion();
-    if (!version.isEmpty()) {
-        version.prepend(" v");
-    }
-    QString website = pack.getWebsite();
-    if (!website.isEmpty()) {
-        website = QString("<br><a href=\"%1\">%1</a>").arg(website);
-    }
-    QString desc = tr("<b>%1</b>%2 by %3<br>\"<i>%4</i>\"%5").arg(pack.getName(), version, pack.getAuthor(), pack.getDescription(), website);
-    smileypackDescLabel->setText(desc);
-
-    if (pack.isEmoji()) {
-        emojiButton->setVisible(true);
-
-    }
-    else {
-        emojiButton->setVisible(false);
-    }
 }
 
 void GuiSettingsPage::updateTimestampPreview(QString format)

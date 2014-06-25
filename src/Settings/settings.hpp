@@ -80,18 +80,6 @@ public:
     bool isAnimationEnabled() const;
     void setAnimationEnabled(bool newValue);
 
-    QByteArray getSmileyPack() const;
-    void setSmileyPack(const QByteArray &value);
-
-    bool isCurstomEmojiFont() const;
-    void setCurstomEmojiFont(bool value);
-
-    QString getEmojiFontFamily() const;
-    void setEmojiFontFamily(const QString &value);
-
-    int getEmojiFontPointSize() const;
-    void setEmojiFontPointSize(int value);
-
     // ChatView
     int getFirstColumnHandlePos() const;
     void setFirstColumnHandlePos(const int pos);
@@ -104,6 +92,26 @@ public:
 
     bool isMinimizeOnCloseEnabled() const;
     void setMinimizeOnClose(bool newValue);
+
+    // Smileys
+    bool isSmileyReplacementEnabled() const;
+    void setSmileyReplacementEnabled(bool value);
+
+    int getSmileyType() const;
+    void setSmileyType(int value);
+
+    QString getSmileyPackPath() const;
+    void setSmileyPackPath(const QString &value);
+
+    bool isCurstomEmojiFont() const;
+    void setCurstomEmojiFont(bool value);
+
+    void setEmojiFontFamily(const QString &value);
+    void setEmojiFontPointSize(int value);
+    QFont getEmojiFont() const;
+
+    bool isEmojiSendPlaintext() const;
+    void setEmojiSendPlaintext(bool value);
 
     // Privacy
     bool isTypingNotificationEnabled() const;
@@ -137,16 +145,21 @@ private:
 
     // GUI
     bool enableSmoothAnimation;
-    QByteArray smileyPack;
-    bool customEmojiFont;
-    QString emojiFontFamily;
-    int     emojiFontPointSize;
     bool minimizeOnClose;
 
     // ChatView
     int firstColumnHandlePos;
     int secondColumnHandlePosFromRight;
     QString timestampFormat;
+
+    // Smileys
+    bool smileyReplacementEnabled;
+    int  smileyType;
+    QString smileyPackPath;
+    bool    emojiFontOverride;
+    QString emojiFontFamily;
+    int     emojiFontPointSize;
+    bool    emojiSendPlaintext;
 
     // Privacy
     bool typingNotification;
@@ -155,8 +168,8 @@ signals:
     //void dataChanged();
     void dhtServerListChanged();
     void logStorageOptsChanged();
+    void smileySettingsChanged();
     void smileyPackChanged();
-    void emojiFontChanged();
     void timestampFormatChanged();
 };
 

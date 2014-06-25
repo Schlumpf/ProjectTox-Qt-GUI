@@ -38,24 +38,16 @@ public:
     void applyChanges();
     
 private slots:
-    void updateSmileypackDetails(int index);
     void updateTimestampPreview(QString format);
 
 private:
     QGroupBox* buildAnimationGroup();
-    QGroupBox* buildSmileypackGroup();
     QGroupBox* buildChatviewGroup();
     QGroupBox* buildOthersGroup();
 
-    void searchSmileyPacks();
-
-    EmojiFontSettingsDialog *emojiSettings;
     QCheckBox* enableAnimationCheckbox;
     QCheckBox* minimizeToTrayCheckbox;
 
-    QComboBox* smileypackCombobox;
-    QToolButton *emojiButton;
-    QLabel*    smileypackDescLabel;
     QLineEdit *timestampLineedit;
     QLabel    *timestampPreview;
 };

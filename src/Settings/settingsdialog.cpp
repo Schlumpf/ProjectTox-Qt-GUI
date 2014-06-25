@@ -18,6 +18,7 @@
 #include "loggingsettingspage.hpp"
 #include "settingsdialog.hpp"
 #include "guisettingspage.hpp"
+#include "smileysettingspage.hpp"
 #include "privacysettingspage.hpp"
 
 SettingsDialog::SettingsDialog(QWidget* parent) :
@@ -29,6 +30,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) :
     //NOTE: make use of when logging will be implemented
     //addPage(":/icons/database.png", "Logging", new LoggingSettingsPage(this));
     addPage(":/icons/application_side_list.png", tr("GUI"), new GuiSettingsPage(this));
+    addPage(":/icons/emotion_smile.png", tr("Smileys"), new SmileySettingsPage(this));
     addPage(":/icons/eye.png", tr("Privacy"), new PrivacySettingsPage(this));
 
     listWidget->setCurrentRow(0);

@@ -86,7 +86,6 @@ SOURCES += \
     ../../src/Settings/guisettingspage.cpp \
     ../../src/Settings/emojifontcombobox.cpp \
     ../../src/smileypack.cpp \
-    ../../src/Settings/emojifontsettingsdialog.cpp \
     ../../src/frienditemdelegate.cpp \
     ../../src/editablelabelwidget.cpp \
     ../../src/esclineedit.cpp \
@@ -106,7 +105,8 @@ SOURCES += \
     ../../src/messages/messagefilter.cpp \
     ../../src/messages/chatviewsearchwidget.cpp \
     ../../src/Settings/privacysettingspage.cpp \
-    ../../src/messages/typingitem.cpp
+    ../../src/messages/typingitem.cpp \
+    ../../src/Settings/smileysettingspage.cpp
 
 HEADERS  += \
     ../../src/mainwindow.hpp \
@@ -143,7 +143,6 @@ HEADERS  += \
     ../../src/Settings/guisettingspage.hpp \
     ../../src/Settings/emojifontcombobox.hpp \
     ../../src/smileypack.hpp \
-    ../../src/Settings/emojifontsettingsdialog.hpp \
     ../../src/frienditemdelegate.hpp \
     ../../src/editablelabelwidget.hpp \
     ../../src/esclineedit.hpp \
@@ -164,7 +163,8 @@ HEADERS  += \
     ../../src/messages/messagefilter.hpp \
     ../../src/messages/chatviewsearchwidget.hpp \
     ../../src/Settings/privacysettingspage.hpp \
-    ../../src/messages/typingitem.hpp
+    ../../src/messages/typingitem.hpp \
+    ../../src/Settings/smileysettingspage.hpp
 
 RESOURCES += \
     ../../resources/resources.qrc

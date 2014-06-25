@@ -94,14 +94,20 @@ void Settings::load()
 
     s.beginGroup("GUI");
         enableSmoothAnimation = s.value("smoothAnimation", true).toBool();
-        smileyPack = s.value("smileyPack").toByteArray();
-        customEmojiFont = s.value("customEmojiFont", true).toBool();
-        emojiFontFamily = s.value("emojiFontFamily", "DejaVu Sans").toString();
-        emojiFontPointSize = s.value("emojiFontPointSize", QApplication::font().pointSize()).toInt();
         firstColumnHandlePos = s.value("firstColumnHandlePos", 50).toInt();
         secondColumnHandlePosFromRight = s.value("secondColumnHandlePosFromRight", 50).toInt();
         timestampFormat = s.value("timestampFormat", "hh:mm").toString();
         minimizeOnClose = s.value("minimizeOnClose", false).toBool();
+    s.endGroup();
+
+    s.beginGroup("Smileys");
+        smileyReplacementEnabled = s.value("smileyReplacementEnabled", true).toBool();
+        smileyType = s.value("smileyType", 1).toInt(); // 1 = pixmap, see smiley.hpp
+        smileyPackPath = s.value("smileyPackPath").toString();
+        emojiFontOverride = s.value("customEmojiFont", true).toBool();
+        emojiFontFamily = s.value("emojiFontFamily", "DejaVu Sans").toString();
+        emojiFontPointSize = s.value("emojiFontPointSize", QApplication::font().pointSize()).toInt();
+        emojiSendPlaintext = s.value("emojiSendPlaintext", true).toBool();
     s.endGroup();
 
     s.beginGroup("Privacy");
@@ -153,14 +159,20 @@ void Settings::save()
 
     s.beginGroup("GUI");
         s.setValue("smoothAnimation", enableSmoothAnimation);
-        s.setValue("smileyPack", smileyPack);
-        s.setValue("customEmojiFont", customEmojiFont);
-        s.setValue("emojiFontFamily", emojiFontFamily);
-        s.setValue("emojiFontPointSize", emojiFontPointSize);
         s.setValue("firstColumnHandlePos", firstColumnHandlePos);
         s.setValue("secondColumnHandlePosFromRight", secondColumnHandlePosFromRight);
         s.setValue("timestampFormat", timestampFormat);
         s.setValue("minimizeOnClose", minimizeOnClose);
+    s.endGroup();
+
+    s.beginGroup("Smileys");
+        s.setValue("smileyReplacementEnabled", smileyReplacementEnabled);
+        s.setValue("smileyType", smileyType);
+        s.setValue("smileyPackPath", smileyPackPath);
+        s.setValue("customEmojiFont", emojiFontOverride);
+        s.setValue("emojiFontFamily", emojiFontFamily);
+        s.setValue("emojiFontPointSize", emojiFontPointSize);
+        s.setValue("emojiSendPlaintext", emojiSendPlaintext);
     s.endGroup();
 
     s.beginGroup("Privacy");
@@ -257,39 +269,6 @@ void Settings::setAnimationEnabled(bool newValue)
     enableSmoothAnimation = newValue;
 }
 
-QByteArray Settings::getSmileyPack() const
-{
-    return smileyPack;
-}
-
-void Settings::setSmileyPack(const QByteArray &value)
-{
-    smileyPack = value;
-    emit smileyPackChanged();
-}
-
-bool Settings::isCurstomEmojiFont() const
-{
-    return customEmojiFont;
-}
-
-void Settings::setCurstomEmojiFont(bool value)
-{
-    customEmojiFont = value;
-    emit emojiFontChanged();
-}
-
-int Settings::getEmojiFontPointSize() const
-{
-    return emojiFontPointSize;
-}
-
-void Settings::setEmojiFontPointSize(int value)
-{
-    emojiFontPointSize = value;
-    emit emojiFontChanged();
-}
-
 int Settings::getFirstColumnHandlePos() const
 {
     return firstColumnHandlePos;
@@ -321,17 +300,6 @@ void Settings::setTimestampFormat(const QString &format)
     emit timestampFormatChanged();
 }
 
-QString Settings::getEmojiFontFamily() const
-{
-    return emojiFontFamily;
-}
-
-void Settings::setEmojiFontFamily(const QString &value)
-{
-    emojiFontFamily = value;
-    emit emojiFontChanged();
-}
-
 bool Settings::isMinimizeOnCloseEnabled() const
 {
     return minimizeOnClose;
@@ -342,6 +310,80 @@ void Settings::setMinimizeOnClose(bool newValue)
     minimizeOnClose = newValue;
 }
 
+// Smileys
+bool Settings::isSmileyReplacementEnabled() const
+{
+    return smileyReplacementEnabled;
+}
+
+void Settings::setSmileyReplacementEnabled(bool value)
+{
+    smileyReplacementEnabled = value;
+    emit smileySettingsChanged();
+}
+
+int Settings::getSmileyType() const
+{
+    return smileyType;
+}
+
+void Settings::setSmileyType(int value)
+{
+    smileyType = value;
+    emit smileySettingsChanged();
+}
+
+QString Settings::getSmileyPackPath() const
+{
+    return smileyPackPath;
+}
+
+void Settings::setSmileyPackPath(const QString &value)
+{
+    smileyPackPath = value;
+    emit smileyPackChanged();
+    emit smileySettingsChanged();
+}
+
+bool Settings::isCurstomEmojiFont() const
+{
+    return emojiFontOverride;
+}
+
+void Settings::setCurstomEmojiFont(bool value)
+{
+    emojiFontOverride = value;
+    emit smileySettingsChanged();
+}
+
+void Settings::setEmojiFontFamily(const QString &value)
+{
+    emojiFontFamily = value;
+    emit smileySettingsChanged();
+}
+
+void Settings::setEmojiFontPointSize(int value)
+{
+    emojiFontPointSize = value;
+    emit smileySettingsChanged();
+}
+
+QFont Settings::getEmojiFont() const
+{
+    return QFont(emojiFontFamily, emojiFontPointSize);
+}
+
+bool Settings::isEmojiSendPlaintext() const
+{
+    return emojiSendPlaintext;
+}
+
+void Settings::setEmojiSendPlaintext(bool value)
+{
+    emojiSendPlaintext = value;
+}
+
+// Privacy
 bool Settings::isTypingNotificationEnabled() const
 {
     return typingNotification;

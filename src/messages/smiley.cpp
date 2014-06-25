@@ -31,20 +31,16 @@ Smiley::Smiley(const QString &text, const QString &graphics, int start, int smil
     mText = text;
     mTextLength = text.length();
     mGraphics = graphics;
-    mEmojiFont = QApplication::font();
 }
 
 // Find smileys with original positions
 SmileyList SmileyList::fromText(QString text)
 {
     // Get current smileypack
-    Settings &settings = Settings::getInstance();
-    Smileypack pack(settings.getSmileyPack());
+    const Settings &settings = Settings::getInstance();
 
     // Reconvert emoji
-    if (!pack.isEmoji()) {
-        text = Smileypack::deemojify(text);
-    }
+    text = Smileypack::deemojify(text);
 
     SmileyList result;
     ClickableList clickables = ClickableList::fromString(text);
@@ -58,7 +54,14 @@ SmileyList SmileyList::fromText(QString text)
 
         // Fill a map with positions of possible smileys
         QMap<int, QStringList> possibleTexts;
-        for (const auto& pair : pack.getList()) {
+
+        Smileypack::SmileypackList smileyList;
+        if (settings.getSmileyType() == Smiley::Emoji)
+            smileyList = Smileypack::emojiList();
+        else
+            smileyList = Smileypack::currentPack().getList();
+
+        for (const auto& pair : smileyList) {
             for (const QString& smileytext : pair.second) {
                 int pos = text.indexOf(smileytext, searchStart);
                 if (pos > -1) {
@@ -97,17 +100,10 @@ SmileyList SmileyList::fromText(QString text)
             if(!clickables.atCursorPos(repPos).isValid()) {
 
                 // Add found smiley to List
-                Smiley smile = Smiley(repSrt, repRep, repPos, repPos - offset, (pack.isEmoji()) ? Smiley::Emoji : Smiley::Pixmap );
-                if (pack.isEmoji() && settings.isCurstomEmojiFont()) {
-                    QFont f = QApplication::font();
-                    f.setFamily(settings.getEmojiFontFamily());
-                    f.setPointSize(settings.getEmojiFontPointSize());
-                    smile.setEmojiFont(f);
-                }
-                result.append(smile);
+                result.append(Smiley(repSrt, repRep, repPos, repPos - offset, (Smiley::Type) settings.getSmileyType()));
 
                 // calculate offset for next smiley
-                offset += repSrt.count() - ((pack.isEmoji()) ? repRep.count() : 1);
+                offset += repSrt.count() - ((settings.getSmileyType() == Smiley::Emoji) ? repRep.count() : 1);
             }
             searchStart = repPos + repSrt.count();
         }
@@ -119,9 +115,11 @@ SmileyList SmileyList::fromText(QString text)
 
 QDebug operator<<(QDebug dbg, const Smiley &smiley)
 {
-    dbg.nospace() << qPrintable(QString("%1 [%2-%3] %4").arg(smiley.text(), 3)
+    dbg.nospace() << qPrintable(QString("%1 [%2-%3][%4-%5] %6").arg(smiley.text(), 3)
                                                         .arg(smiley.start(), 3)
                                                         .arg(smiley.start()+smiley.textLength()-1, 3)
+                                                        .arg(smiley.smileyfiedStart(), 3)
+                                                        .arg(smiley.smileyfiedStart()+((smiley.type() == Smiley::Emoji) ? smiley.graphics().count() : 1 )-1, 3)
                                                         .arg(smiley.graphics()));
     return dbg;
 }
