@@ -33,6 +33,7 @@ Core::Core() :
     tox(nullptr)
 {
     timer = new QTimer(this);
+    timer->setSingleShot(true);
     connect(timer, &QTimer::timeout, this, &Core::process);
     connect(&Settings::getInstance(), &Settings::dhtServerListChanged, this, &Core::bootstrapDht);
 }
@@ -45,7 +46,7 @@ Core::~Core()
     }
 }
 
-void Core::onFriendRequest(Tox*/* tox*/, uint8_t* cUserId, uint8_t* cMessage, uint16_t cMessageSize, void* core)
+void Core::onFriendRequest(Tox*/* tox*/, const uint8_t* cUserId, const uint8_t* cMessage, uint16_t cMessageSize, void* core)
 {
     emit static_cast<Core*>(core)->friendRequestReceived(CUserId::toString(cUserId), CString::toString(cMessage, cMessageSize));
 }
@@ -130,10 +131,63 @@ void Core::requestFriendship(const QString& friendAddress, const QString& messag
 
 void Core::sendMessage(int friendId, const QString& message)
 {
-    CString cMessage(message);
+    QByteArray byteArray= message.toUtf8();
 
-    int messageId = tox_send_message(tox, friendId, cMessage.data(), cMessage.size());
-    emit messageSentResult(friendId, message, messageId);
+    int messageOffset = 0;
+    int absoluteMaxLength = TOX_MAX_MESSAGE_LENGTH + messageOffset;
+    // keep splitting message while it's too big
+    while (byteArray.size() > absoluteMaxLength) {
+        int absoluteMaxPosition = absoluteMaxLength - 1;
+
+        static const char multibyteCodepoint = 1 << 7; // 1xxxxxxx mask
+        static const char multibyteCodepointStart = 1 << 6; // x1xxxxxx mask
+        int lastCodepointStart = -1;
+        // find a codepoint start position
+        // UTF-8 codepoints are maximum of 4 bytes in length
+        for (int i = absoluteMaxPosition; i > absoluteMaxPosition - 4; i --) {
+            // if we are at multibyte codepoint but not at its start yet -- keep moving back
+            if ((byteArray[i] & multibyteCodepoint) && !(byteArray[i] & multibyteCodepointStart)) {
+                continue;
+            }
+            // we are either at a single-byte codepoint or at the beginning of a multibyte one -- split the message
+            lastCodepointStart = i;
+            break;
+        }
+
+        // try to split on whitespace or punctuation instead of just cutting off at a codepoint
+        static const char *splitOn = " .,-";
+        int splitPosition = -1;
+        for (int i = lastCodepointStart; i > absoluteMaxPosition - TOX_MAX_MESSAGE_LENGTH / 4; i --) {
+            // if we are at multibyte codepoint -- keep moving back
+            if (byteArray[i] & multibyteCodepoint) {
+                continue;
+            }
+            // we are at single-byte codepoint, check if it matches any of splitOn characters
+            for (const char *splitChar = splitOn; *splitChar != 0; splitChar ++) {
+                if (byteArray[i] == *splitChar) {
+                    // keep split char on old line
+                    splitPosition = i + 1;
+                    goto found;
+                }
+            }
+        }
+found:
+        if (splitPosition <= messageOffset || splitPosition > absoluteMaxLength) {
+            splitPosition = lastCodepointStart;
+        }
+
+        int messageId = tox_send_message(tox, friendId, reinterpret_cast<uint8_t*>(byteArray.data() + messageOffset), splitPosition - messageOffset);
+        emit messageSentResult(friendId, QString::fromUtf8(byteArray.data() + messageOffset, splitPosition - messageOffset), messageId);
+
+        messageOffset = splitPosition;
+        absoluteMaxLength = TOX_MAX_MESSAGE_LENGTH + messageOffset;
+    }
+
+    if (byteArray.size() - messageOffset > 0) {
+        int messageId = tox_send_message(tox, friendId, reinterpret_cast<uint8_t*>(byteArray.data() + messageOffset), byteArray.size() - messageOffset);
+        emit messageSentResult(friendId, QString::fromUtf8(byteArray.data() + messageOffset, byteArray.size() - messageOffset), messageId);
+    }
+
 }
 
 void Core::sendAction(int friendId, const QString &action)
@@ -224,6 +278,7 @@ void Core::process()
     fflush(stdout);
 #endif
     checkConnection();
+    timer->start(tox_do_interval(tox));
 }
 
 void Core::checkConnection()
@@ -372,8 +427,7 @@ void Core::start()
 
     bootstrapDht();
 
-    timer->setInterval(45);
-    timer->start();
+    timer->start(tox_do_interval(tox));
 }
 
 
@@ -400,9 +454,9 @@ uint16_t Core::CData::size()
     return cDataSize;
 }
 
-QString Core::CData::toString(uint8_t* cData, uint16_t cDataSize)
+QString Core::CData::toString(const uint8_t *cData, const uint16_t cDataSize)
 {
-    return QString(QByteArray(reinterpret_cast<char*>(cData), cDataSize).toHex()).toUpper();
+    return QString(QByteArray(reinterpret_cast<const char*>(cData), cDataSize).toHex()).toUpper();
 }
 
 uint16_t Core::CData::fromString(const QString& data, uint8_t* cData)
@@ -421,7 +475,7 @@ Core::CUserId::CUserId(const QString &userId) :
     // intentionally left empty
 }
 
-QString Core::CUserId::toString(uint8_t* cUserId)
+QString Core::CUserId::toString(const uint8_t* cUserId)
 {
     return CData::toString(cUserId, SIZE);
 }
@@ -435,7 +489,7 @@ Core::CFriendAddress::CFriendAddress(const QString &friendAddress) :
     // intentionally left empty
 }
 
-QString Core::CFriendAddress::toString(uint8_t* cFriendAddress)
+QString Core::CFriendAddress::toString(const uint8_t *cFriendAddress)
 {
     return CData::toString(cFriendAddress, SIZE);
 }
@@ -464,9 +518,9 @@ uint16_t Core::CString::size()
     return cStringSize;
 }
 
-QString Core::CString::toString(uint8_t* cString, uint16_t cStringSize)
+QString Core::CString::toString(const uint8_t* cString, uint16_t cStringSize)
 {
-    return QString::fromUtf8(reinterpret_cast<char*>(cString), cStringSize);
+    return QString::fromUtf8(reinterpret_cast<const char*>(cString), cStringSize);
 }
 
 uint16_t Core::CString::fromString(const QString& string, uint8_t* cString)
