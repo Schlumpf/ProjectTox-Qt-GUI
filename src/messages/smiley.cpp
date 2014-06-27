@@ -39,9 +39,6 @@ SmileyList SmileyList::fromText(QString text)
     // Get current smileypack
     const Settings &settings = Settings::getInstance();
 
-    // Reconvert emoji
-    text = Smileypack::deemojify(text);
-
     SmileyList result;
     ClickableList clickables = ClickableList::fromString(text);
 

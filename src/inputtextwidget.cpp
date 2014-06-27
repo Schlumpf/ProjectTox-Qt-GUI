@@ -137,7 +137,7 @@ void InputTextWidget::insertSmiley(const Smiley &smiley)
     } else if(smiley.type() == Smiley::Emoji) {
         const Settings &settings = Settings::getInstance();
         if (settings.isCurstomEmojiFont())
-            ;//insertHtml(QString("<span style=\"font-family: '%1'; font-size: %2pt;\">%3</span>").arg(settings.getEmojiFont().family(), QString::number(settings.getEmojiFont().pointSize()), smiley.graphics()));
+            insertHtml(QString("<span style=\"font-family: '%1'; font-size: %2pt;\">%3</span>").arg(settings.getEmojiFont().family(), QString::number(settings.getEmojiFont().pointSize()), smiley.graphics()));
         else
             insertPlainText(smiley.graphics());
     }

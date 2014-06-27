@@ -31,6 +31,7 @@
 #include "smileytextobject.hpp"
 #include <QStyleOption>
 #include <QTextDocumentFragment>
+#include "smileypack.hpp"
 
 #include "Settings/settings.hpp"
 
@@ -465,8 +466,10 @@ void ContentsChatItem::initDocument(QTextDocument *doc)
     const Settings &settings = Settings::getInstance();
     QString text = data(MessageModel::DisplayRole).toString();
 
-    if(settings.isSmileyReplacementEnabled())
+    if(settings.isSmileyReplacementEnabled()) {
+        text = Smileypack::deemojify(text);
         privateData()->smileys = SmileyList::fromText(text);
+    }
 
     doc->setPlainText(text);
     doc->setTextWidth(width());

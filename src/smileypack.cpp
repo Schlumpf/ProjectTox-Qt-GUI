@@ -89,7 +89,7 @@ QString Smileypack::deemojify(QString text)
 {
     for (const auto& pair : Smileypack::emojiList()) {
         const QStringList& textSmilies = pair.second;
-        text.replace(pair.first, textSmilies.first().toHtmlEscaped());
+        text.replace(pair.first, textSmilies.first());
     }
     return text;
 }
