@@ -81,15 +81,13 @@ void SmileySettingsPage::setGui()
 void SmileySettingsPage::applyChanges()
 {
     Settings& settings = Settings::getInstance();
-
-    // Emoji font settings
-    settings.setSmileyReplacementEnabled(mSmileyGroup->isChecked());
-    settings.setSmileyType(mSmileyType->currentData().toInt());
-    settings.setCurstomEmojiFont(mEmojiFontGroup->isChecked());
-    settings.setEmojiFontFamily(mEmojiFontComboBox->itemText(mEmojiFontComboBox->currentIndex()));
-    settings.setEmojiFontPointSize(mEmojiFontSizeSpinBox->value());
-    settings.setEmojiSendPlaintext(mSendPlaintextCheckbox->isChecked());
-    settings.setSmileyPackPath(mSmileyPacks.at(mSmileypackCombobox->currentIndex())->getThemeFile());
+    settings.setSmileySettings(mSmileyGroup->isChecked(),
+                               mSmileyType->currentData().toInt(),
+                               mSmileyPacks.at(mSmileypackCombobox->currentIndex())->getThemeFile(),
+                               mEmojiFontGroup->isChecked(),
+                               mEmojiFontComboBox->itemText(mEmojiFontComboBox->currentIndex()),
+                               mEmojiFontSizeSpinBox->value(),
+                               mSendPlaintextCheckbox->isChecked());
 }
 
 /*void SmileySettingsPage::updateEmojiFontPreview()

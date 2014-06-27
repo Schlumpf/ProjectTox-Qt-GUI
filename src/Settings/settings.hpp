@@ -94,24 +94,14 @@ public:
     void setMinimizeOnClose(bool newValue);
 
     // Smileys
+    void setSmileySettings(bool replacementEnabled, int type, const QString &packPath, bool eFontOverride, const QString &eFontFamily, int eFontPointSize, bool eSendPlaintext);
+
     bool isSmileyReplacementEnabled() const;
-    void setSmileyReplacementEnabled(bool value);
-
     int getSmileyType() const;
-    void setSmileyType(int value);
-
     QString getSmileyPackPath() const;
-    void setSmileyPackPath(const QString &value);
-
     bool isCurstomEmojiFont() const;
-    void setCurstomEmojiFont(bool value);
-
-    void setEmojiFontFamily(const QString &value);
-    void setEmojiFontPointSize(int value);
     QFont getEmojiFont() const;
-
     bool isEmojiSendPlaintext() const;
-    void setEmojiSendPlaintext(bool value);
 
     // Privacy
     bool isTypingNotificationEnabled() const;

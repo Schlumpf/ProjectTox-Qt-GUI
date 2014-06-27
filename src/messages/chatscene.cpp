@@ -863,6 +863,12 @@ void ChatScene::clickTimeout()
         handleClick(Qt::LeftButton, _clickPos);
 }
 
+/*! Relayouts the whole scene */
+void ChatScene::updateLayout()
+{
+    layout(0, _lines.count()-1, _sceneRect.width());
+}
+
 void ChatScene::setHandleXLimits()
 {
     _firstColHandle->setXLimits(0, _secondColHandle->sceneLeft() - minContentsWidth);

@@ -66,6 +66,8 @@ public:
 
 public slots:
     void clearCache();
+    void clearTimestampCache();
+    void clearContentCacheAndRelayout();
     inline virtual void clear() {}
 
     void setTypingNotificationVisible(const QString &name, bool visible = true);

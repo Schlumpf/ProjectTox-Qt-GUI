@@ -32,6 +32,7 @@ ChatViewSearchWidget::ChatViewSearchWidget(QWidget *parent) :
     mRegularMsgOnly(true)
 {
     setHidden(true);
+    mSearchEnabled = false;
     setIconSize(QSize(16,16));
 
     mSearchDelayTimer.setSingleShot(true);

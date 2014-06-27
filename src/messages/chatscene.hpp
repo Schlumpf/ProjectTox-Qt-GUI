@@ -98,6 +98,7 @@ public slots:
     void updateForViewport(qreal width, qreal height);
     void setWidth(qreal width);
     void layout(int start, int end, qreal width);
+    void updateLayout();
 
     void setMarkerLineValid(bool valid = true);
     void setMarkerLineVisible(bool visible = true);

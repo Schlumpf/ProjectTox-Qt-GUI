@@ -296,8 +296,10 @@ const QString &Settings::getTimestampFormat() const
 
 void Settings::setTimestampFormat(const QString &format)
 {
-    timestampFormat = format;
-    emit timestampFormatChanged();
+    if (timestampFormat != format) {
+        timestampFormat = format;
+        emit timestampFormatChanged();
+    }
 }
 
 bool Settings::isMinimizeOnCloseEnabled() const
@@ -311,15 +313,46 @@ void Settings::setMinimizeOnClose(bool newValue)
 }
 
 // Smileys
+void Settings::setSmileySettings(bool replacementEnabled, int type, const QString &packPath, bool eFontOverride, const QString &eFontFamily, int eFontPointSize, bool eSendPlaintext)
+{
+    bool changed = false;
+    if (smileyReplacementEnabled != replacementEnabled) {
+        smileyReplacementEnabled = replacementEnabled;
+        changed = true;
+    }
+    if (smileyType != type) {
+        smileyType = type;
+        changed = true;
+    }
+    if (smileyPackPath != packPath) {
+        smileyPackPath = packPath;
+        emit smileyPackChanged();
+        changed = true;
+    }
+    if (emojiFontOverride != eFontOverride) {
+        emojiFontOverride = eFontOverride;
+        changed = true;
+    }
+    if (emojiFontFamily != eFontFamily) {
+        emojiFontFamily = eFontFamily;
+        changed = true;
+    }
+    if (emojiFontPointSize != eFontPointSize) {
+        emojiFontPointSize = eFontPointSize;
+        changed = true;
+    }
+    if (emojiSendPlaintext != eSendPlaintext) {
+        emojiSendPlaintext = eSendPlaintext;
+        changed = true;
+    }
+
+    if(changed)
+        emit smileySettingsChanged();
+}
+
 bool Settings::isSmileyReplacementEnabled() const
 {
     return smileyReplacementEnabled;
-}
-
-void Settings::setSmileyReplacementEnabled(bool value)
-{
-    smileyReplacementEnabled = value;
-    emit smileySettingsChanged();
 }
 
 int Settings::getSmileyType() const
@@ -327,45 +360,14 @@ int Settings::getSmileyType() const
     return smileyType;
 }
 
-void Settings::setSmileyType(int value)
-{
-    smileyType = value;
-    emit smileySettingsChanged();
-}
-
 QString Settings::getSmileyPackPath() const
 {
     return smileyPackPath;
 }
 
-void Settings::setSmileyPackPath(const QString &value)
-{
-    smileyPackPath = value;
-    emit smileyPackChanged();
-    emit smileySettingsChanged();
-}
-
 bool Settings::isCurstomEmojiFont() const
 {
     return emojiFontOverride;
-}
-
-void Settings::setCurstomEmojiFont(bool value)
-{
-    emojiFontOverride = value;
-    emit smileySettingsChanged();
-}
-
-void Settings::setEmojiFontFamily(const QString &value)
-{
-    emojiFontFamily = value;
-    emit smileySettingsChanged();
-}
-
-void Settings::setEmojiFontPointSize(int value)
-{
-    emojiFontPointSize = value;
-    emit smileySettingsChanged();
 }
 
 QFont Settings::getEmojiFont() const
@@ -376,11 +378,6 @@ QFont Settings::getEmojiFont() const
 bool Settings::isEmojiSendPlaintext() const
 {
     return emojiSendPlaintext;
-}
-
-void Settings::setEmojiSendPlaintext(bool value)
-{
-    emojiSendPlaintext = value;
 }
 
 // Privacy

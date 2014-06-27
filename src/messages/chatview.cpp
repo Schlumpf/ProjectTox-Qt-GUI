@@ -52,7 +52,8 @@ ChatView::ChatView(MessageFilter *model, QWidget *parent) :
     _lastScrollbarPos = verticalScrollBar()->value();
 
     // Update timstamps
-    connect(&Settings::getInstance(), &Settings::timestampFormatChanged, this, &ChatView::clearCache);
+    connect(&Settings::getInstance(), &Settings::timestampFormatChanged, this, &ChatView::clearTimestampCache);
+    connect(&Settings::getInstance(), &Settings::smileySettingsChanged, this, &ChatView::clearContentCacheAndRelayout);
 
     // Actions
     hidePlain = new QAction(tr("Text messages"), this);
@@ -181,6 +182,31 @@ void ChatView::clearCache()
         iter = _linesWithCache.erase(iter);
         line->update();
     }
+}
+
+void ChatView::clearTimestampCache()
+{
+    QSet<ChatLine *>::iterator iter = _linesWithCache.begin();
+    while (iter != _linesWithCache.end()) {
+        ChatLine *line = *iter;
+        line->timestampItem()->clearCache();
+        iter = _linesWithCache.erase(iter);
+        line->update();
+    }
+}
+
+void ChatView::clearContentCacheAndRelayout()
+{
+    // Clear content cache
+    QSet<ChatLine *>::iterator iter = _linesWithCache.begin();
+    while (iter != _linesWithCache.end()) {
+        ChatLine *line = *iter;
+        line->contentsItem()->clearCache();
+        iter = _linesWithCache.erase(iter);
+        line->update();
+    }
+
+    scene()->updateLayout();
 }
 
 void ChatView::setTypingNotificationVisible(const QString &name, bool visible)

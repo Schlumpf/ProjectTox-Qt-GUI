@@ -46,9 +46,7 @@ ChatItem::ChatItem(const QRectF &boundingRect, ChatLine *parent) :
 
 ChatItem::~ChatItem()
 {
-    if(mDoc)
-        delete mDoc;
-
+    clearCache();
     qDeleteAll(mHighlights);
 }
 

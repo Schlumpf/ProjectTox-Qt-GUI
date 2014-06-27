@@ -1,0 +1,20 @@
+Name = TOX Qt GUI Smileys
+Author = FatCow
+Description = A default smileypack for TOX Qt GUI.
+Verion = 0.1
+
+[theme]
+emotion_smile.png    :) :-) :o)
+emotion_sad.png      :( :-(
+emotion_grin.png     :D :-D
+emotion_cool.png     8) 8-)
+emotion_suprised.png :O :-O
+emotion_wink.png     ;) ;-)
+emotion_cry.png      ;( ;-(
+emotion_sweat.png    (:|
+emotion_kiss.png     :* :-*
+emotion_tongue.png   :P :-P
+emotion_angel.png    O:) O:-) o:) o:-) (angel)
+emotion_doubt.png    :^) :^-)
+emotion_love.png     (inlove)
+emotion_evilgrin.png ]:) ]:-)
