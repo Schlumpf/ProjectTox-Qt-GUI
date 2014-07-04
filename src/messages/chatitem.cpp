@@ -465,12 +465,17 @@ void ContentsChatItem::initDocument(QTextDocument *doc)
     QString text = data(MessageModel::DisplayRole).toString();
 
     if(settings.isSmileyReplacementEnabled()) {
-        text = Smileypack::deemojify(text);
+        if (settings.getSmileyType() == Smiley::Pixmap)
+            text = Smileypack::deemojify(text);
         privateData()->smileys = SmileyList::fromText(text);
     }
 
     doc->setPlainText(text);
     doc->setTextWidth(width());
+
+    // Resize incomming emoji
+    if(settings.isCurstomEmojiFont())
+        Smileypack::resizeEmoji(doc);
 
     // Replace smileys
     QTextCursor c(doc);

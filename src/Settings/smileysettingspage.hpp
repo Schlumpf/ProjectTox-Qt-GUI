@@ -40,22 +40,21 @@ public:
     void applyChanges();
 
 private slots:
-    //void updateEmojiFontPreview();
     void updatesmileyPackDesc(int index);
-    void updatePreview();
+    void updateEmojiPreview();
 
 private:
     QGroupBox *buildSmileyGroup();
     QGroupBox *buildEmojiFontGroup();
-    QGroupBox *BuildPreviewGroup();
 
     void searchSmileyPacks();
 
     QGroupBox *mSmileyGroup;
     QComboBox *mSmileyType;
 
-    QComboBox* mSmileypackCombobox;
-    QLabel*    smileypackDescLabel;
+    QComboBox *mSmileypackCombobox;
+    QLabel    *mSmileypackDescLabel;
+    QLabel    *mSmileypackPreview;
 
     QList<Smileypack*> mSmileyPacks;
 
@@ -65,9 +64,7 @@ private:
     QGroupBox         *mEmojiFontGroup;
     EmojiFontComboBox *mEmojiFontComboBox;
     QSpinBox          *mEmojiFontSizeSpinBox;
-
-    // Preview
-    QLabel *mPreview;
+    QLabel            *mEmojiFontPreview;
 };
 
 

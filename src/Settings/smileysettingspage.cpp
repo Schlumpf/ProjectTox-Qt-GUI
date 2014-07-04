@@ -43,7 +43,7 @@ void SmileySettingsPage::buildGui()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(buildSmileyGroup());
-    layout->addWidget(BuildPreviewGroup());
+    layout->addWidget(buildEmojiFontGroup());
     layout->addStretch(0);
 }
 
@@ -67,15 +67,6 @@ void SmileySettingsPage::setGui()
             index = i;
     }
     mSmileypackCombobox->setCurrentIndex(index);
-
-    connect(mSmileyType,           SIGNAL(currentIndexChanged(int)), this, SLOT(updatePreview()));
-    connect(mSmileypackCombobox,   SIGNAL(currentIndexChanged(int)), this, SLOT(updatePreview()));
-    connect(mEmojiFontGroup,       SIGNAL(toggled(bool)),            this, SLOT(updatePreview()));
-    connect(mEmojiFontComboBox,    SIGNAL(currentIndexChanged(int)), this, SLOT(updatePreview()));
-    connect(mEmojiFontSizeSpinBox, SIGNAL(valueChanged(int)),        this, SLOT(updatePreview()));
-
-    updatesmileyPackDesc(0);
-    updatePreview();
 }
 
 void SmileySettingsPage::applyChanges()
@@ -89,18 +80,6 @@ void SmileySettingsPage::applyChanges()
                                mEmojiFontSizeSpinBox->value(),
                                mSendPlaintextCheckbox->isChecked());
 }
-
-/*void SmileySettingsPage::updateEmojiFontPreview()
-{
-    QFont font = mEmojiPreviewLabel->font();
-    if (mEmojiFontGroup->isChecked()) {
-        font.setFamily(mEmojiFontComboBox->itemText(mEmojiFontComboBox->currentIndex()));
-        font.setPointSize(mEmojiFontSizeSpinBox->value());
-    } else {
-        font = QApplication::font();
-    }
-    mEmojiPreviewLabel->setFont(font);
-}*/
 
 QGroupBox *SmileySettingsPage::buildSmileyGroup()
 {
@@ -121,12 +100,17 @@ QGroupBox *SmileySettingsPage::buildSmileyGroup()
     QVBoxLayout *packLayout = new QVBoxLayout(packPage);
     packLayout->setContentsMargins(0,0,0,0);
     mSmileypackCombobox = new QComboBox(packPage);
-    smileypackDescLabel = new QLabel(packPage);
-    smileypackDescLabel->setWordWrap(true);
-    smileypackDescLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    smileypackDescLabel->setOpenExternalLinks(true);
+    mSmileypackDescLabel = new QLabel(packPage);
+    mSmileypackDescLabel->setWordWrap(true);
+    mSmileypackDescLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    mSmileypackDescLabel->setOpenExternalLinks(true);
+    mSmileypackPreview = new QLabel(packPage);
+    mSmileypackPreview->setAlignment(Qt::AlignCenter);
+    mSmileypackPreview->setMinimumSize(300, 30);
+    mSmileypackPreview->setFrameShape(QFrame::StyledPanel);
     packLayout->addWidget(mSmileypackCombobox);
-    packLayout->addWidget(smileypackDescLabel);
+    packLayout->addWidget(mSmileypackDescLabel);
+    packLayout->addWidget(mSmileypackPreview);
     packLayout->addStretch(0);
     connect(mSmileypackCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updatesmileyPackDesc(int)));
 
@@ -138,7 +122,6 @@ QGroupBox *SmileySettingsPage::buildSmileyGroup()
     emojiLayout->setContentsMargins(0,0,0,0);
     mSendPlaintextCheckbox = new QCheckBox(tr("Send plaintext (reconvert emoji characters)"), emojiPage);
     emojiLayout->addWidget(mSendPlaintextCheckbox);
-    emojiLayout->addWidget(buildEmojiFontGroup());
 
     QVBoxLayout *layout = new QVBoxLayout(mSmileyGroup);
     layout->addWidget(mSmileyType);
@@ -167,28 +150,26 @@ QGroupBox *SmileySettingsPage::buildEmojiFontGroup()
         mEmojiFontSizeSpinBox->setValue(QApplication::font().pointSize());
     });
 
+    mEmojiFontPreview = new QLabel(mEmojiFontGroup);
+    mEmojiFontPreview->setAlignment(Qt::AlignCenter);
+    mEmojiFontPreview->setMinimumSize(300, 30);
+    mEmojiFontPreview->setFrameShape(QFrame::StyledPanel);
+    mEmojiFontPreview->setText("☺ 😞 😄 😲 😉 😜 😇 🐱");
+
+    connect(mEmojiFontComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEmojiPreview()));
+    connect(mEmojiFontSizeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateEmojiPreview()));
+
     QHBoxLayout *selectLayout = new QHBoxLayout();
     selectLayout->addWidget(mEmojiFontComboBox);
     selectLayout->addWidget(mEmojiFontSizeSpinBox);
     selectLayout->addWidget(defaultButton);
 
+
     QVBoxLayout *layout = new QVBoxLayout(mEmojiFontGroup);
     layout->addLayout(selectLayout);
+    layout->addWidget(mEmojiFontPreview);
 
     return mEmojiFontGroup;
-}
-
-QGroupBox *SmileySettingsPage::BuildPreviewGroup()
-{
-    QGroupBox *group = new QGroupBox(tr("Preview"), this);
-    mPreview = new QLabel(group);
-    mPreview->setAlignment(Qt::AlignCenter);
-    mPreview->setMinimumSize(300, 30);
-
-    QVBoxLayout *layout = new QVBoxLayout(group);
-    layout->addWidget(mPreview);
-
-    return group;
 }
 
 void SmileySettingsPage::searchSmileyPacks()
@@ -229,6 +210,7 @@ void SmileySettingsPage::updatesmileyPackDesc(int index)
 
     const Smileypack *pack = mSmileyPacks.at(index);
 
+    // Description
     QString version = pack->getVersion();
     if (!version.isEmpty()) {
         version.prepend(" v");
@@ -238,34 +220,23 @@ void SmileySettingsPage::updatesmileyPackDesc(int index)
         website = QString("<br><a href=\"%1\">%1</a>").arg(website);
     }
     QString desc = tr("<b>%1</b>%2 by %3<br>\"<i>%4</i>\"%5").arg(pack->getName(), version, pack->getAuthor(), pack->getDescription(), website);
-    smileypackDescLabel->setText(desc);
+    mSmileypackDescLabel->setText(desc);
+
+    // Preview
+    QString text;
+    int count = pack->getList().count();
+    if(count > 10)
+        count = 10;
+    for (int i=0; i<count; i++)
+        text.append(QString("<img src=\"%1\"> ").arg(pack->getList().at(i).first));
+
+    mSmileypackPreview->setText(text);
 }
 
-void SmileySettingsPage::updatePreview()
+void SmileySettingsPage::updateEmojiPreview()
 {
     QFont font;
-    QString text;
-
-    if (mSmileyType->currentData().toInt() == Smiley::Emoji) {
-        if (mEmojiFontGroup->isChecked()) {
-            font.setFamily(mEmojiFontComboBox->itemText(mEmojiFontComboBox->currentIndex()));
-            font.setPointSize(mEmojiFontSizeSpinBox->value());
-        }
-        text = "☺ 😞 😄 😎 😲 😉 😜 😇 🐱";
-    }
-    else if (mSmileyType->currentData().toInt() == Smiley::Pixmap) {
-        int index = mSmileypackCombobox->currentIndex();
-        if (index < 0)
-            return;
-
-        const Smileypack *pack = mSmileyPacks.at(index);
-        int count = pack->getList().count();
-        if(count > 10)
-            count = 10;
-        for (int i=0; i<count; i++)
-            text.append(QString("<img src=\"%1\"> ").arg(pack->getList().at(i).first));
-    }
-
-    mPreview->setText(text);
-    mPreview->setFont(font);
+    font.setFamily(mEmojiFontComboBox->itemText(mEmojiFontComboBox->currentIndex()));
+    font.setPointSize(mEmojiFontSizeSpinBox->value());
+    mEmojiFontPreview->setFont(font);
 }

@@ -21,6 +21,7 @@
 #include <QPair>
 #include <QStringList>
 #include "messages/smiley.hpp"
+#include <QTextDocument>
 
 
 class Smileypack : public QObject
@@ -53,7 +54,7 @@ public:
 
     static QString desmilify(QString htmlText); // and deemojifiy
     static QString deemojify(QString text);
-    //static QString resizeEmoji(QString text);
+    static void resizeEmoji(QTextDocument *doc);
     static const SmileypackList emojiList();
 
     static Smileypack &currentPack();
