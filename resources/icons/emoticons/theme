@@ -1,7 +1,7 @@
 Name = TOX Qt GUI Smileys
 Author = FatCow
 Description = A default smileypack for TOX Qt GUI.
-Verion = 0.1
+Version = 0.1
 
 [theme]
 emotion_smile.png    :) :-) :o)

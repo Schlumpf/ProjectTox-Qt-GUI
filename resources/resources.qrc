@@ -31,5 +31,6 @@
         <file>icons/text_uppercase.png</file>
         <file>icons/eye.png</file>
         <file>icons/emotion_smile.png</file>
+        <file>icons/emotion.png</file>
     </qresource>
 </RCC>

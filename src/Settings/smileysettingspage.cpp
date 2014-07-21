@@ -53,7 +53,7 @@ void SmileySettingsPage::setGui()
 
     // Emoji font settings
     mSmileyGroup->setChecked(settings.isSmileyReplacementEnabled());
-    mSmileyType->setCurrentIndex(mSmileyType->findData((Smiley::Type)settings.getSmileyType()));
+    mSmileyType->button(settings.getSmileyType())->setChecked(true);
     mEmojiFontGroup->setChecked(settings.isCurstomEmojiFont());
     mEmojiFontComboBox->setCurrentIndex(mEmojiFontComboBox->findText(settings.getEmojiFont().family()));
     mEmojiFontSizeSpinBox->setValue(settings.getEmojiFont().pointSize());
@@ -73,7 +73,7 @@ void SmileySettingsPage::applyChanges()
 {
     Settings& settings = Settings::getInstance();
     settings.setSmileySettings(mSmileyGroup->isChecked(),
-                               mSmileyType->currentData().toInt(),
+                               mSmileyType->checkedId(),
                                mSmileyPacks.at(mSmileypackCombobox->currentIndex())->getThemeFile(),
                                mEmojiFontGroup->isChecked(),
                                mEmojiFontComboBox->itemText(mEmojiFontComboBox->currentIndex()),
@@ -86,46 +86,47 @@ QGroupBox *SmileySettingsPage::buildSmileyGroup()
     mSmileyGroup = new QGroupBox(tr("Enable smiley replacement"), this);
     mSmileyGroup->setCheckable(true);
 
-    mSmileyType = new QComboBox(mSmileyGroup);
-    mSmileyType->addItem(tr("Use a smileypack"), Smiley::Pixmap);
-    mSmileyType->addItem(tr("Use emoji"), Smiley::Emoji);
+    QRadioButton *smileypackRadio = new QRadioButton(tr("Use a smileypack"), mSmileyGroup);
+    QRadioButton *emojiRadio = new QRadioButton(tr("Use emoji"), mSmileyGroup);
 
-    QStackedWidget *typeStack = new QStackedWidget(mSmileyGroup);
-    connect(mSmileyType, SIGNAL(currentIndexChanged(int)), typeStack, SLOT(setCurrentIndex(int)));
+    mSmileyType = new QButtonGroup(this);
+    mSmileyType->setExclusive(true);
+    mSmileyType->addButton(smileypackRadio, Smiley::Pixmap);
+    mSmileyType->addButton(emojiRadio, Smiley::Emoji);
 
     // Smileypack settings
-    QWidget *packPage = new QWidget(typeStack);
-    packPage->setContentsMargins(0,0,0,0);
-    typeStack->addWidget(packPage);
-    QVBoxLayout *packLayout = new QVBoxLayout(packPage);
-    packLayout->setContentsMargins(0,0,0,0);
-    mSmileypackCombobox = new QComboBox(packPage);
-    mSmileypackDescLabel = new QLabel(packPage);
-    mSmileypackDescLabel->setWordWrap(true);
-    mSmileypackDescLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    mSmileypackDescLabel->setOpenExternalLinks(true);
-    mSmileypackPreview = new QLabel(packPage);
+    QGroupBox *smileypackGroup = new QGroupBox(tr("Smileypack settings"),this);
+    smileypackGroup->setDisabled(true);
+    QVBoxLayout *packLayout = new QVBoxLayout(smileypackGroup);
+    mSmileypackCombobox = new QComboBox(smileypackGroup);
+    mSmileypackPreview = new QLabel(smileypackGroup);
     mSmileypackPreview->setAlignment(Qt::AlignCenter);
-    mSmileypackPreview->setMinimumSize(300, 30);
+    mSmileypackPreview->setFixedHeight(30);
     mSmileypackPreview->setFrameShape(QFrame::StyledPanel);
     packLayout->addWidget(mSmileypackCombobox);
-    packLayout->addWidget(mSmileypackDescLabel);
     packLayout->addWidget(mSmileypackPreview);
-    packLayout->addStretch(0);
-    connect(mSmileypackCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updatesmileyPackDesc(int)));
+    packLayout->addStretch();
+    connect(mSmileypackCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSmileyPackPreview(int)));
+    connect(smileypackRadio, &QRadioButton::toggled, smileypackGroup, &QGroupBox::setEnabled);
 
     // Emoji settings
-    QWidget *emojiPage = new QWidget(typeStack);
-    emojiPage->setContentsMargins(0,0,0,0);
-    typeStack->addWidget(emojiPage);
-    QVBoxLayout *emojiLayout = new QVBoxLayout(emojiPage);
-    emojiLayout->setContentsMargins(0,0,0,0);
-    mSendPlaintextCheckbox = new QCheckBox(tr("Send plaintext (reconvert emoji characters)"), emojiPage);
+    QGroupBox *emojiGroup = new QGroupBox(tr("Emoji settings"),this);
+    emojiGroup->setDisabled(true);
+    QVBoxLayout *emojiLayout = new QVBoxLayout(emojiGroup);
+    mSendPlaintextCheckbox = new QCheckBox(tr("Avoid sending emoji\nConvert emoji to :-)"), emojiGroup);
     emojiLayout->addWidget(mSendPlaintextCheckbox);
+    emojiLayout->addStretch();
+    connect(emojiRadio, &QRadioButton::toggled, emojiGroup, &QGroupBox::setEnabled);
+
+    // Layouting
+    QHBoxLayout *hLayout = new QHBoxLayout();
+    hLayout->addWidget(smileypackGroup);
+    hLayout->addWidget(emojiGroup);
 
     QVBoxLayout *layout = new QVBoxLayout(mSmileyGroup);
-    layout->addWidget(mSmileyType);
-    layout->addWidget(typeStack);
+    layout->addWidget(smileypackRadio);
+    layout->addWidget(emojiRadio);
+    layout->addLayout(hLayout);
 
     return mSmileyGroup;
 }
@@ -152,7 +153,7 @@ QGroupBox *SmileySettingsPage::buildEmojiFontGroup()
 
     mEmojiFontPreview = new QLabel(mEmojiFontGroup);
     mEmojiFontPreview->setAlignment(Qt::AlignCenter);
-    mEmojiFontPreview->setMinimumSize(300, 30);
+    mEmojiFontPreview->setFixedHeight(30);
     mEmojiFontPreview->setFrameShape(QFrame::StyledPanel);
     mEmojiFontPreview->setText("☺ 😞 😄 😲 😉 😜 😇 🐱");
 
@@ -203,30 +204,18 @@ void SmileySettingsPage::searchSmileyPacks()
     }
 }
 
-void SmileySettingsPage::updatesmileyPackDesc(int index)
+void SmileySettingsPage::updateSmileyPackPreview(int index)
 {
     if(index >= mSmileyPacks.count())
         return;
 
     const Smileypack *pack = mSmileyPacks.at(index);
 
-    // Description
-    QString version = pack->getVersion();
-    if (!version.isEmpty()) {
-        version.prepend(" v");
-    }
-    QString website = pack->getWebsite();
-    if (!website.isEmpty()) {
-        website = QString("<br><a href=\"%1\">%1</a>").arg(website);
-    }
-    QString desc = tr("<b>%1</b>%2 by %3<br>\"<i>%4</i>\"%5").arg(pack->getName(), version, pack->getAuthor(), pack->getDescription(), website);
-    mSmileypackDescLabel->setText(desc);
-
     // Preview
     QString text;
     int count = pack->getList().count();
-    if(count > 10)
-        count = 10;
+    if(count > 5)
+        count = 5;
     for (int i=0; i<count; i++)
         text.append(QString("<img src=\"%1\"> ").arg(pack->getList().at(i).first));
 

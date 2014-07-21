@@ -28,6 +28,7 @@ class QComboBox;
 class QLabel;
 class EmojiFontComboBox;
 class QSpinBox;
+class QButtonGroup;
 
 class SmileySettingsPage : public AbstractSettingsPage
 {
@@ -40,7 +41,7 @@ public:
     void applyChanges();
 
 private slots:
-    void updatesmileyPackDesc(int index);
+    void updateSmileyPackPreview(int index);
     void updateEmojiPreview();
 
 private:
@@ -49,11 +50,10 @@ private:
 
     void searchSmileyPacks();
 
-    QGroupBox *mSmileyGroup;
-    QComboBox *mSmileyType;
+    QGroupBox    *mSmileyGroup;
+    QButtonGroup *mSmileyType;
 
     QComboBox *mSmileypackCombobox;
-    QLabel    *mSmileypackDescLabel;
     QLabel    *mSmileypackPreview;
 
     QList<Smileypack*> mSmileyPacks;

@@ -54,7 +54,7 @@ ChatPageWidget::ChatPageWidget(int friendId, QWidget* parent) :
     EmoticonMenu *menu = new EmoticonMenu(this);
     emoticonButton = new QToolButton(inputPanel);
     emoticonButton->setPopupMode(QToolButton::InstantPopup);
-    emoticonButton->setIcon(QIcon(":/icons/emoticons/emotion_smile.png"));
+    emoticonButton->setIcon(QIcon(":/icons/emotion.png"));
     emoticonButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     emoticonButton->setMenu(menu);
     connect(menu, &EmoticonMenu::insertSmiley, input, &InputTextWidget::insertSmiley);
